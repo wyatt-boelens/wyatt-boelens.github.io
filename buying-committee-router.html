@@ -163,57 +163,10 @@
     margin-top:20px;
   }
 
-  label.field-label{
-    display:block;
-    font-family:var(--font-mono);
-    font-size:11.5px;letter-spacing:0.06em;text-transform:uppercase;
-    color:var(--text-muted);
-    margin:18px 0 8px;
-  }
-  label.field-label:first-child{margin-top:0;}
 
-  textarea{
-    width:100%;
-    background:var(--navy-deep);
-    border:1px solid var(--border-subtle);
-    border-radius:4px;
-    color:var(--text-primary);
-    font-family:var(--font-mono);
-    font-size:13.5px;
-    padding:16px;
-    min-height:150px;
-    resize:vertical;
-    line-height:1.55;
-  }
-  textarea#trigger-input{min-height:70px;}
-  textarea:focus{outline:2px solid var(--accent-amber-line);outline-offset:1px;}
 
-  .demo-controls{
-    display:flex;align-items:center;gap:16px;margin-top:14px;flex-wrap:wrap;
-  }
 
-  button.run-btn{
-    font-family:var(--font-mono);
-    font-size:13px;letter-spacing:0.06em;text-transform:uppercase;
-    background:var(--accent-amber);
-    color:#1A1204;
-    border:none;
-    padding:12px 22px;
-    border-radius:3px;
-    cursor:pointer;
-    font-weight:600;
-    transition:opacity 0.15s ease;
-  }
-  button.run-btn:hover{opacity:0.88;}
-  button.run-btn:disabled{opacity:0.5;cursor:default;}
-  button.run-btn:focus-visible{outline:2px solid var(--text-primary);outline-offset:2px;}
 
-  .status{
-    font-family:var(--font-mono);
-    font-size:12.5px;
-    color:var(--text-muted);
-  }
-  .status.err{color:#E38A6E;}
 
   .account-plans{margin-top:24px;display:flex;flex-direction:column;gap:10px;}
   .sequence-card{
@@ -428,33 +381,70 @@
   </section>
 
   <section>
-    <div class="eyebrow">Try it — live</div>
-    <h2>Paste a prospect list</h2>
-    <p>Runs against a fictional B2B seller ("Northbridge") with an invented reference-customer roster spanning several industries — this calls a live model to apply the exact rules above to whatever you paste in. Add known account triggers if you have them; leave it blank and the system falls back to the templated approach honestly, rather than inventing a reason that isn't real.</p>
+    <div class="eyebrow">Example output</div>
+    <h2>Same rules, applied to a sample batch</h2>
+    <p>A static example, not a live tool — this is exactly what the rules above produce when run against a small fictional batch, including the account-level sequencing note. Three of the five prospects share a company on purpose, to show that behavior directly.</p>
     <div class="panel">
-      <label class="field-label" for="prospect-input">Prospect list — one per line</label>
-      <textarea id="prospect-input" spellcheck="false">Elena Cross, VP of Operations, Ironbridge Fabrication
-Ravi Patel, IT Manager, Ironbridge Fabrication
-Sam Okafor, Operations Coordinator, Ironbridge Fabrication
-Marcus Webb, Director of Underwriting, Crestpoint Capital
-Priya Nair, CEO, Fernwood Retail</textarea>
-
-      <label class="field-label" for="trigger-input">Known account triggers — optional, one per line</label>
-      <textarea id="trigger-input" spellcheck="false">Ironbridge Fabrication: opened a second manufacturing facility this quarter</textarea>
-
-      <div class="demo-controls">
-        <button class="run-btn" id="run-btn" onclick="runDemo()">Run the router</button>
-        <span class="status" id="status-text"></span>
+      <div class="account-plans">
+        <div class="sequence-card">
+          <div class="sequence-company">Ironbridge Fabrication — suggested sequence</div>
+          <div class="sequence-text">Start with Sam Okafor (End User) to understand day-to-day friction firsthand, loop in Ravi Patel (Technical Evaluator) once there's something concrete to review, and bring Elena Cross (Executive Sponsor) in last with both perspectives already in hand rather than a cold pitch.</div>
+        </div>
       </div>
-      <div class="result-wrap" id="result-wrap" style="display:none;">
-        <div id="account-plans" class="account-plans"></div>
-        <table id="result-table">
+      <div class="result-wrap">
+        <table>
           <thead>
             <tr>
               <th>Company</th><th>Name</th><th>Title</th><th>Role</th><th>Proof Point(s)</th><th>Pain Angle / Reframe</th><th>Opener</th>
             </tr>
           </thead>
-          <tbody id="result-body"></tbody>
+          <tbody>
+            <tr>
+              <td>Ironbridge Fabrication</td>
+              <td>Elena Cross</td>
+              <td>VP of Operations</td>
+              <td><span class="persona-tag">Likely Executive Sponsor</span><span class="validate-note">Validate: "Are you the one who signs off on this, or does someone above you need to weigh in?"</span></td>
+              <td>Foundry Metalworks</td>
+              <td>Most ops leaders measure efficiency in headcount, but the real constraint at a growing plant is how fast decisions turn into action on the floor.</td>
+              <td>With a second facility ramping up, keeping decision speed matched to floor execution becomes the real bottleneck — worth a quick conversation?</td>
+            </tr>
+            <tr>
+              <td>Ironbridge Fabrication</td>
+              <td>Ravi Patel</td>
+              <td>IT Manager</td>
+              <td><span class="persona-tag">Likely Technical Evaluator</span><span class="validate-note">Validate: "Would security and integration review sit with you, or does that go through a separate team?"</span></td>
+              <td>Foundry Metalworks</td>
+              <td>Any new system tends to mean another integration to secure and maintain, on top of an already full plate.</td>
+              <td>Curious how integration review usually works on your end before something like this even reaches a pilot.</td>
+            </tr>
+            <tr>
+              <td>Ironbridge Fabrication</td>
+              <td>Sam Okafor</td>
+              <td>Operations Coordinator</td>
+              <td><span class="persona-tag">Likely End User</span><span class="validate-note">Validate: "Are you the one actually running this day to day, or does it roll up to someone else?"</span></td>
+              <td>Foundry Metalworks</td>
+              <td>The tools that are supposed to save time on the floor often just move the friction somewhere else.</td>
+              <td>Would be useful to hear what actually slows you down day to day before assuming what would help.</td>
+            </tr>
+            <tr>
+              <td>Crestpoint Capital</td>
+              <td>Marcus Webb</td>
+              <td>Director of Underwriting</td>
+              <td><span class="persona-tag">Likely Champion</span><span class="validate-note">Validate: "If this moved forward, would you be the one building the internal case for it?"</span></td>
+              <td>Anchor Trust</td>
+              <td>Proving the value of a new process internally is usually harder than the process itself.</td>
+              <td>What's usually the hardest part of getting a new tool past the finish line internally on your end?</td>
+            </tr>
+            <tr>
+              <td>Fernwood Retail</td>
+              <td>Priya Nair</td>
+              <td>CEO</td>
+              <td><span class="persona-tag">Likely Economic Buyer</span><span class="validate-note">Validate: "Are you personally signing off on tools like this, or does that sit with someone else on your team?"</span></td>
+              <td>Havenmark Co.</td>
+              <td>Most retail executives treat acquisition and retention as separate budget conversations, but the real cost shows up in how disconnected those two efforts end up looking to the customer.</td>
+              <td>Not looking for time, just flagging it — worth a two-line reply either way.</td>
+            </tr>
+          </tbody>
         </table>
       </div>
     </div>
@@ -467,145 +457,6 @@ Priya Nair, CEO, Fernwood Retail</textarea>
 
 </div>
 
-<script>
-function escapeHtml(str){
-  const div = document.createElement('div');
-  div.textContent = str == null ? '' : String(str);
-  return div.innerHTML;
-}
 
-async function runDemo(){
-  const btn = document.getElementById('run-btn');
-  const statusEl = document.getElementById('status-text');
-  const resultWrap = document.getElementById('result-wrap');
-  const body = document.getElementById('result-body');
-  const plansEl = document.getElementById('account-plans');
-  const input = document.getElementById('prospect-input').value.trim();
-  const triggers = document.getElementById('trigger-input').value.trim();
-
-  if(!input){
-    statusEl.textContent = 'Paste at least one prospect first.';
-    statusEl.className = 'status err';
-    return;
-  }
-
-  btn.disabled = true;
-  statusEl.className = 'status';
-  statusEl.textContent = 'Routing prospects…';
-  resultWrap.style.display = 'none';
-
-  const instructions = `You are simulating a B2B sales prospect-routing and account-sequencing system for a fictional software vendor called Northbridge, which sells into multiple industries.
-
-Treat every role classification as a hypothesis to be validated in discovery, not an asserted fact — this mirrors real MEDDIC discipline, where labels like "Economic Buyer" or "Champion" are earned through confirmed information, not assumed from a title alone.
-
-Given a list of prospects (name, title, company, in any reasonable format) and an optional list of known account triggers, return a JSON object with exactly two keys: "contacts" and "accountPlans".
-
-CONTACTS — for EACH prospect, produce one object with these exact keys: "company","name","title","role","validateQuestion","proofPoints","painAngle","opener","flag".
-
-1. ROLE — classify into exactly one of: Economic Buyer, Executive Sponsor, Champion, Technical Evaluator, End User.
-   - Economic Buyer: true C-level titles only — Founder, President, Owner, CEO, COO, CFO, CRO, or any "Chief ___ Officer".
-   - Executive Sponsor: VP, SVP, or EVP titles.
-   - Champion: Director or Head-of level in the function most affected by the likely pain.
-   - End User: individual-contributor or coordinator-level titles in that same function.
-   - Technical Evaluator: IT, Security, Ops, Engineering, or Procurement titles, regardless of seniority level.
-   - If a title has no real path to a purchase decision, still assign the closest-fit role but set "flag" to "No clear fit".
-
-2. VALIDATE QUESTION — one short discovery question a rep should actually ask to confirm this role hypothesis before treating it as fact. Specific to the role assigned, not generic.
-
-3. PROOF POINTS — pick 1-2 reference-customer names from this fictional roster, matching the prospect's vertical directly if possible, otherwise the closest adjacent-vertical match. Never recommend the prospect's own company as its own proof point:
-   Manufacturing: Ironbridge Fabrication, Foundry Metalworks
-   Financial Services & Lending: Crestpoint Capital, Anchor Trust
-   Construction: Bedrock Builders, Trailhead Construction
-   Healthcare: Northgate Health, Willowmere Clinical
-   Retail & eCommerce: Fernwood Retail, Havenmark Co.
-   Logistics & Distribution: Portside Logistics, Ridgeline Freight
-   Technology & SaaS: Vantage Cloud, Bracket Systems
-
-4. PAIN ANGLE and OPENER:
-   - If flag is "No clear fit": leave "painAngle" as an empty string, and make "opener" a single short, low-touch line — not a tailored pitch. This is a deliberate downgrade: weak fits get less generation effort, not the same treatment as a real buying-committee member.
-   - If role is Economic Buyer or Executive Sponsor: "painAngle" is a genuine strategic reframe in the style of the Challenger Sale — a specific point of view that challenges how this person likely currently thinks about the problem. Not a generic budget-risk statement, and not a "your peers deal with this too" namedrop.
-   - Otherwise: "painAngle" is one short, role-level sentence naming the priority that role would plausibly care about (Champion: proving internal value; Technical Evaluator: integration/security/feasibility; End User: day-to-day friction). Templated, not researched — do not invent specific personal facts.
-   - "opener" ties the pain angle to a conversation with Northbridge. No corporate filler, no words like "lead" or "prospect" in the copy itself.
-   - TRIGGERS: if a known trigger was provided below for this prospect's company, work it naturally into the opener. If no trigger was provided for their company, do not invent one — use the templated approach honestly.
-
-ACCOUNT PLANS — for any company appearing 2 or more times in the prospect list, add one object to "accountPlans" with keys "company" and "sequence". "sequence" is 1-2 sentences recommending which contact to approach first and why, and how the others should follow — real multi-threading logic (e.g. use an End User or Technical Evaluator to gather intel before opening an Executive Sponsor, or vice versa depending on the mix). Skip companies with only one contact in the list.
-
-Return ONLY valid JSON, no markdown fences, no preamble, no explanation, no trailing commentary.
-
-Prospect list:
-${input}
-
-Known account triggers (optional, may be empty):
-${triggers || "(none provided)"}`;
-
-  try{
-    const response = await fetch("https://api.anthropic.com/v1/messages", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        model: "claude-sonnet-4-6",
-        max_tokens: 1000,
-        messages: [{ role: "user", content: instructions }]
-      })
-    });
-
-    if(!response.ok){
-      throw new Error('Request failed (' + response.status + ')');
-    }
-
-    const data = await response.json();
-    const textBlocks = (data.content || [])
-      .filter(item => item.type === "text")
-      .map(item => item.text)
-      .join("\n");
-
-    const cleaned = textBlocks.replace(/```json/g,'').replace(/```/g,'').trim();
-    const parsed = JSON.parse(cleaned);
-    const contacts = Array.isArray(parsed.contacts) ? parsed.contacts : [];
-    const accountPlans = Array.isArray(parsed.accountPlans) ? parsed.accountPlans : [];
-
-    contacts.sort((a,b) => String(a.company).localeCompare(String(b.company)));
-
-    plansEl.innerHTML = '';
-    accountPlans.forEach(plan => {
-      const card = document.createElement('div');
-      card.className = 'sequence-card';
-      card.innerHTML = `
-        <div class="sequence-company">${escapeHtml(plan.company)} — suggested sequence</div>
-        <div class="sequence-text">${escapeHtml(plan.sequence)}</div>
-      `;
-      plansEl.appendChild(card);
-    });
-
-    body.innerHTML = '';
-    contacts.forEach(row => {
-      const tr = document.createElement('tr');
-      const isLowTouch = row.flag && row.flag.length > 0;
-      const painCell = isLowTouch ? '<span class="low-touch">Low-touch — insufficient signal for a tailored angle</span>' : escapeHtml(row.painAngle);
-      const openerCell = escapeHtml(row.opener) + (isLowTouch ? '<br><span class="flag">⚠ ' + escapeHtml(row.flag) + '</span>' : '');
-      tr.innerHTML = `
-        <td>${escapeHtml(row.company)}</td>
-        <td>${escapeHtml(row.name)}</td>
-        <td>${escapeHtml(row.title)}</td>
-        <td><span class="persona-tag">Likely ${escapeHtml(row.role)}</span><span class="validate-note">Validate: "${escapeHtml(row.validateQuestion)}"</span></td>
-        <td>${escapeHtml(row.proofPoints)}</td>
-        <td>${painCell}</td>
-        <td>${openerCell}</td>
-      `;
-      body.appendChild(tr);
-    });
-
-    resultWrap.style.display = 'block';
-    statusEl.textContent = 'Done — ' + contacts.length + ' prospect' + (contacts.length === 1 ? '' : 's') + ' routed' + (accountPlans.length ? ', ' + accountPlans.length + ' account sequence' + (accountPlans.length === 1 ? '' : 's') + ' generated.' : '.');
-    statusEl.className = 'status';
-  }catch(err){
-    statusEl.textContent = 'Something went wrong running the demo. Try again, or trim the list.';
-    statusEl.className = 'status err';
-    console.error(err);
-  }finally{
-    btn.disabled = false;
-  }
-}
-</script>
 </body>
 </html>
