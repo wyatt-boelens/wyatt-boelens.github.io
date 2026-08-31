@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<!--
+  Portfolio case study for Wyatt Boelens — v3. Adds three fixes on top of the
+  genericized B2B version: (1) role output is framed as a validated hypothesis,
+  not an asserted fact, (2) weak fits get routed to a genuinely lower-touch
+  output instead of just a flag, (3) account-level multi-threading/sequencing
+  for contacts sharing a company, plus an optional known-trigger input and an
+  honest "where this stops" scope section.
+
+  NOTE TO WYATT: the "Why this matters" section still has a placeholder —
+  swap in real metrics once you have them.
+-->
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Buying Committee Router — GTM Systems Case Study</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,500;8..60,600&family=IBM+Plex+Mono:wght@400;500;600&display=swap');
+
+  :root{
+    --navy-deep:#0F1B2E;
+    --navy-panel:#152640;
+    --navy-panel-2:#1B3050;
+    --grid-line:rgba(138,160,196,0.14);
+    --grid-line-strong:rgba(138,160,196,0.32);
+    --text-primary:#EAF0F8;
+    --text-secondary:#93A8CC;
+    --text-muted:#5E7397;
+    --accent-amber:#E3A94A;
+    --accent-amber-dim:rgba(227,169,74,0.14);
+    --accent-amber-line:rgba(227,169,74,0.55);
+    --border-subtle:rgba(138,160,196,0.22);
+    --font-display:'Space Grotesk', ui-sans-serif, system-ui, sans-serif;
+    --font-body:'Source Serif 4', Georgia, ui-serif, serif;
+    --font-mono:'IBM Plex Mono', ui-monospace, 'SFMono-Regular', monospace;
+  }
+
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--navy-deep);
+    color:var(--text-primary);
+    font-family:var(--font-body);
+    line-height:1.6;
+    background-image:
+      linear-gradient(var(--grid-line) 1px, transparent 1px),
+      linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+    background-size:32px 32px;
+  }
+
+  .wrap{max-width:840px;margin:0 auto;padding:64px 24px 96px;}
+
+  .stamp{
+    display:inline-flex;align-items:center;gap:8px;
+    font-family:var(--font-mono);
+    font-size:11px;letter-spacing:0.12em;text-transform:uppercase;
+    color:var(--accent-amber);
+    border:1px solid var(--accent-amber-line);
+    padding:5px 10px;border-radius:2px;
+    background:var(--accent-amber-dim);
+  }
+
+  h1{
+    font-family:var(--font-display);
+    font-weight:600;
+    font-size:clamp(32px,5vw,48px);
+    line-height:1.08;
+    letter-spacing:-0.01em;
+    margin:20px 0 16px;
+    color:var(--text-primary);
+  }
+
+  .subhead{
+    font-size:18px;
+    color:var(--text-secondary);
+    max-width:660px;
+    margin:0 0 8px;
+  }
+
+  .demo-tag{
+    font-family:var(--font-mono);
+    font-size:12.5px;
+    color:var(--text-muted);
+    margin-top:20px;
+    padding-top:16px;
+    border-top:1px dashed var(--border-subtle);
+  }
+
+  section{margin-top:72px;}
+
+  .eyebrow{
+    font-family:var(--font-mono);
+    font-size:12px;letter-spacing:0.14em;text-transform:uppercase;
+    color:var(--accent-amber);
+    margin-bottom:14px;
+    display:flex;align-items:center;gap:10px;
+  }
+  .eyebrow::after{
+    content:'';flex:1;height:1px;background:var(--grid-line-strong);
+  }
+
+  h2{
+    font-family:var(--font-display);
+    font-size:26px;font-weight:600;
+    margin:0 0 18px;
+    color:var(--text-primary);
+  }
+
+  p{color:var(--text-secondary);font-size:16.5px;margin:0 0 14px;}
+  p:last-child{margin-bottom:0;}
+
+  .panel{
+    background:var(--navy-panel);
+    border:1px solid var(--border-subtle);
+    border-radius:6px;
+    padding:28px 30px;
+  }
+
+  .diagram-panel{
+    background:var(--navy-panel);
+    border:1px solid var(--border-subtle);
+    border-radius:6px;
+    padding:20px 12px 8px;
+    overflow-x:auto;
+  }
+  .diagram-caption{
+    font-family:var(--font-mono);
+    font-size:11.5px;color:var(--text-muted);
+    text-align:center;margin-top:8px;letter-spacing:0.03em;
+  }
+
+  .rules{display:flex;flex-direction:column;gap:0;}
+  .rule{
+    display:grid;grid-template-columns:64px 1fr;gap:20px;
+    padding:22px 0;
+    border-top:1px solid var(--border-subtle);
+  }
+  .rule:first-child{border-top:none;padding-top:0;}
+  .rule-num{
+    font-family:var(--font-mono);
+    font-size:13px;color:var(--accent-amber);
+    padding-top:2px;
+  }
+  .rule-title{
+    font-family:var(--font-display);
+    font-size:16.5px;font-weight:600;
+    color:var(--text-primary);
+    margin-bottom:6px;
+    letter-spacing:0.01em;
+  }
+  .rule p{font-size:15.5px;margin-bottom:0;}
+
+  .callout{
+    border:1px dashed var(--border-subtle);
+    background:transparent;
+    border-radius:6px;
+    padding:18px 22px;
+    font-family:var(--font-mono);
+    font-size:13px;
+    color:var(--text-muted);
+    font-style:italic;
+    margin-top:20px;
+  }
+
+  label.field-label{
+    display:block;
+    font-family:var(--font-mono);
+    font-size:11.5px;letter-spacing:0.06em;text-transform:uppercase;
+    color:var(--text-muted);
+    margin:18px 0 8px;
+  }
+  label.field-label:first-child{margin-top:0;}
+
+  textarea{
+    width:100%;
+    background:var(--navy-deep);
+    border:1px solid var(--border-subtle);
+    border-radius:4px;
+    color:var(--text-primary);
+    font-family:var(--font-mono);
+    font-size:13.5px;
+    padding:16px;
+    min-height:150px;
+    resize:vertical;
+    line-height:1.55;
+  }
+  textarea#trigger-input{min-height:70px;}
+  textarea:focus{outline:2px solid var(--accent-amber-line);outline-offset:1px;}
+
+  .demo-controls{
+    display:flex;align-items:center;gap:16px;margin-top:14px;flex-wrap:wrap;
+  }
+
+  button.run-btn{
+    font-family:var(--font-mono);
+    font-size:13px;letter-spacing:0.06em;text-transform:uppercase;
+    background:var(--accent-amber);
+    color:#1A1204;
+    border:none;
+    padding:12px 22px;
+    border-radius:3px;
+    cursor:pointer;
+    font-weight:600;
+    transition:opacity 0.15s ease;
+  }
+  button.run-btn:hover{opacity:0.88;}
+  button.run-btn:disabled{opacity:0.5;cursor:default;}
+  button.run-btn:focus-visible{outline:2px solid var(--text-primary);outline-offset:2px;}
+
+  .status{
+    font-family:var(--font-mono);
+    font-size:12.5px;
+    color:var(--text-muted);
+  }
+  .status.err{color:#E38A6E;}
+
+  .account-plans{margin-top:24px;display:flex;flex-direction:column;gap:10px;}
+  .sequence-card{
+    border-left:2px solid var(--accent-amber-line);
+    background:var(--navy-deep);
+    border-radius:0 4px 4px 0;
+    padding:12px 16px;
+  }
+  .sequence-company{
+    font-family:var(--font-mono);
+    font-size:11px;letter-spacing:0.05em;text-transform:uppercase;
+    color:var(--accent-amber);
+    margin-bottom:4px;
+  }
+  .sequence-text{font-size:14px;color:var(--text-secondary);}
+
+  .result-wrap{margin-top:24px;overflow-x:auto;}
+  table{width:100%;border-collapse:collapse;font-size:13.5px;min-width:780px;}
+  th{
+    font-family:var(--font-mono);
+    font-size:10.5px;letter-spacing:0.08em;text-transform:uppercase;
+    text-align:left;color:var(--accent-amber);
+    padding:10px 12px;border-bottom:1px solid var(--accent-amber-line);
+    white-space:nowrap;
+  }
+  td{
+    padding:12px;
+    border-bottom:1px solid var(--border-subtle);
+    color:var(--text-secondary);
+    vertical-align:top;
+  }
+  tr:last-child td{border-bottom:none;}
+  .persona-tag{
+    font-family:var(--font-mono);
+    font-size:11px;
+    padding:2px 7px;
+    border-radius:2px;
+    border:1px solid var(--accent-amber-line);
+    color:var(--accent-amber);
+    white-space:nowrap;
+    display:inline-block;
+  }
+  .validate-note{
+    display:block;
+    font-size:11px;
+    font-style:italic;
+    color:var(--text-muted);
+    margin-top:6px;
+    max-width:220px;
+  }
+  .flag{color:#E38A6E;font-family:var(--font-mono);font-size:11px;}
+  .low-touch{
+    font-style:italic;
+    color:var(--text-muted);
+    font-size:12.5px;
+  }
+
+  footer{
+    margin-top:88px;
+    padding-top:24px;
+    border-top:1px solid var(--border-subtle);
+    font-family:var(--font-mono);
+    font-size:12px;
+    color:var(--text-muted);
+    display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;
+  }
+
+  @media (max-width:600px){
+    .wrap{padding:40px 16px 64px;}
+    section{margin-top:52px;}
+    .rule{grid-template-columns:1fr;gap:6px;}
+    footer{flex-direction:column;}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="stamp">REV. 03 — DEMONSTRATION BUILD</div>
+  <h1>The Buying Committee Router</h1>
+  <p class="subhead">A rules-based AI agent that generates a working hypothesis of each contact's buying-committee role, matches them to the right proof point, and sequences multi-threaded accounts — the same logic whether you're selling into manufacturing, financial services, healthcare, construction, or software.</p>
+  <p class="demo-tag">Genericized reconstruction for portfolio purposes. The role-classification, sequencing, and proof-point logic is real and mine; the seller, reference customers, and prospects below are fictional.</p>
+
+  <section>
+    <div class="eyebrow">The problem</div>
+    <p>Personalizing outreach at scale usually forces a bad trade-off: spend real time per prospect figuring out who they are on the buying committee and what they'd actually care about, or send something generic and accept a weaker reply rate. That trade-off gets worse once a list spans multiple industries, multiple contacts at the same account, or both — a title that signals "champion" in one vertical can mean something completely different in another, and two contacts from the same company usually deserve a sequence, not two identical one-off emails.</p>
+    <p>The fix is turning the judgment call a good rep makes instinctively — who is this person on the deal, what do they actually own, what would make them reply, and who should get approached first — into an explicit rule set an agent can apply consistently, without overstating what it actually knows.</p>
+  </section>
+
+  <section>
+    <div class="eyebrow">How it routes a prospect</div>
+    <div class="diagram-panel">
+      <svg viewBox="0 0 960 760" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;display:block;" role="img" aria-label="Flow diagram of the buying-committee routing logic">
+        <defs>
+          <pattern id="bpgrid" width="24" height="24" patternUnits="userSpaceOnUse">
+            <path d="M 24 0 L 0 0 0 24" fill="none" stroke="var(--grid-line)" stroke-width="1"/>
+          </pattern>
+          <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+            <path d="M0,0 L10,5 L0,10 z" fill="var(--accent-amber)"/>
+          </marker>
+        </defs>
+        <rect width="960" height="760" fill="url(#bpgrid)"/>
+
+        <rect x="380" y="20" width="200" height="48" rx="4" fill="var(--navy-panel-2)" stroke="var(--border-subtle)"/>
+        <text x="480" y="49" text-anchor="middle" font-family="var(--font-mono)" font-size="13" letter-spacing="0.05em" fill="var(--text-primary)">PROSPECT INPUT</text>
+        <line x1="480" y1="68" x2="480" y2="106" stroke="var(--accent-amber-line)" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+        <rect x="380" y="110" width="200" height="48" rx="4" fill="var(--navy-panel-2)" stroke="var(--border-subtle)"/>
+        <text x="480" y="139" text-anchor="middle" font-family="var(--font-mono)" font-size="13" letter-spacing="0.05em" fill="var(--text-primary)">TITLE PARSED</text>
+        <line x1="480" y1="158" x2="480" y2="181" stroke="var(--accent-amber-line)" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+        <polygon points="480,182 592,228 480,274 368,228" fill="var(--navy-panel-2)" stroke="var(--accent-amber-line)" stroke-width="1.5"/>
+        <text x="480" y="223" text-anchor="middle" font-family="var(--font-mono)" font-size="11.5" fill="var(--text-primary)">SENIOR LEADERSHIP</text>
+        <text x="480" y="238" text-anchor="middle" font-family="var(--font-mono)" font-size="11.5" fill="var(--text-primary)">TITLE?</text>
+
+        <line x1="392" y1="242" x2="270" y2="316" stroke="var(--accent-amber-line)" stroke-width="1.5" marker-end="url(#arrow)"/>
+        <text x="300" y="280" font-family="var(--font-mono)" font-size="11" fill="var(--accent-amber)">YES</text>
+        <rect x="170" y="320" width="200" height="60" rx="4" fill="var(--navy-panel-2)" stroke="var(--border-subtle)"/>
+        <text x="270" y="346" text-anchor="middle" font-family="var(--font-mono)" font-size="12.5" letter-spacing="0.03em" fill="var(--text-primary)">ECONOMIC BUYER</text>
+        <text x="270" y="363" text-anchor="middle" font-family="var(--font-mono)" font-size="10.5" fill="var(--text-secondary)">/ EXEC SPONSOR</text>
+
+        <line x1="568" y1="242" x2="690" y2="316" stroke="var(--accent-amber-line)" stroke-width="1.5" marker-end="url(#arrow)"/>
+        <text x="640" y="280" font-family="var(--font-mono)" font-size="11" fill="var(--accent-amber)">NO</text>
+        <rect x="550" y="320" width="280" height="72" rx="4" fill="var(--navy-panel-2)" stroke="var(--border-subtle)"/>
+        <text x="690" y="345" text-anchor="middle" font-family="var(--font-mono)" font-size="12.5" letter-spacing="0.04em" fill="var(--text-primary)">ROLE MATCH</text>
+        <text x="690" y="366" text-anchor="middle" font-family="var(--font-mono)" font-size="10.5" fill="var(--text-secondary)">CHAMPION · END USER</text>
+        <text x="690" y="381" text-anchor="middle" font-family="var(--font-mono)" font-size="10.5" fill="var(--text-secondary)">TECHNICAL EVALUATOR</text>
+
+        <line x1="270" y1="380" x2="480" y2="466" stroke="var(--accent-amber-line)" stroke-width="1.5"/>
+        <line x1="690" y1="392" x2="480" y2="466" stroke="var(--accent-amber-line)" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+        <rect x="350" y="470" width="260" height="58" rx="4" fill="var(--navy-panel-2)" stroke="var(--border-subtle)"/>
+        <text x="480" y="494" text-anchor="middle" font-family="var(--font-mono)" font-size="12.5" letter-spacing="0.04em" fill="var(--text-primary)">PROOF POINT MATCH</text>
+        <text x="480" y="513" text-anchor="middle" font-family="var(--font-mono)" font-size="10.5" fill="var(--text-secondary)">direct vertical → adjacent fallback</text>
+
+        <line x1="610" y1="499" x2="700" y2="480" stroke="var(--grid-line-strong)" stroke-width="1" stroke-dasharray="3,3"/>
+        <text x="705" y="483" font-family="var(--font-mono)" font-size="10.5" fill="var(--text-muted)">Economic Buyer: pain angle</text>
+        <text x="705" y="496" font-family="var(--font-mono)" font-size="10.5" fill="var(--text-muted)">becomes a strategic reframe</text>
+
+        <line x1="350" y1="499" x2="255" y2="480" stroke="var(--grid-line-strong)" stroke-width="1" stroke-dasharray="3,3"/>
+        <text x="15" y="483" font-family="var(--font-mono)" font-size="10.5" fill="var(--text-muted)">Weak fit → flagged, routed</text>
+        <text x="15" y="496" font-family="var(--font-mono)" font-size="10.5" fill="var(--text-muted)">to a low-touch fallback</text>
+
+        <line x1="480" y1="528" x2="480" y2="556" stroke="var(--accent-amber-line)" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+        <rect x="350" y="560" width="260" height="50" rx="4" fill="var(--navy-panel-2)" stroke="var(--border-subtle)"/>
+        <text x="480" y="590" text-anchor="middle" font-family="var(--font-mono)" font-size="12.5" letter-spacing="0.03em" fill="var(--text-primary)">PAIN ANGLE + OPENER</text>
+
+        <line x1="480" y1="610" x2="480" y2="638" stroke="var(--accent-amber-line)" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+        <rect x="350" y="642" width="260" height="50" rx="4" fill="var(--accent-amber-dim)" stroke="var(--accent-amber-line)"/>
+        <text x="480" y="672" text-anchor="middle" font-family="var(--font-mono)" font-size="12.5" letter-spacing="0.04em" fill="var(--accent-amber)">STRUCTURED OUTPUT ROW</text>
+      </svg>
+      <div class="diagram-caption">the same decision path every prospect runs through, regardless of vertical or list size</div>
+      <div class="diagram-caption">role assignments are hypotheses to validate in discovery, not confirmed facts — see rule 01. contacts sharing a company also generate a sequencing plan — see rule 04.</div>
+    </div>
+  </section>
+
+  <section>
+    <div class="eyebrow">The architecture</div>
+    <div class="panel">
+      <div class="rules">
+        <div class="rule">
+          <div class="rule-num">01</div>
+          <div>
+            <div class="rule-title">Classify by buying-committee role — and treat it as a hypothesis, not a fact</div>
+            <p>Only true C-suite (CEO, COO, CFO, CRO, Founder, President, any "Chief ___ Officer") routes to Economic Buyer; VP/SVP/EVP routes to Executive Sponsor; Director/Head-of level in the affected function routes to Champion; IC-level in that function routes to End User; and IT/Security/Ops/Procurement routes to Technical Evaluator regardless of seniority. But every assignment ships with the discovery question that would actually confirm it. A title-based label is an assumption until a real conversation validates it — treating it as settled fact is the exact mistake MEDDIC discipline exists to catch.</p>
+          </div>
+        </div>
+        <div class="rule">
+          <div class="rule-num">02</div>
+          <div>
+            <div class="rule-title">Match proof points on segment overlap, not just industry label</div>
+            <p>Check for a same-vertical reference customer first. If none exists, fall back to the closest adjacent match based on comparable buying motion, company size, or operational profile — rather than forcing a same-label reference that doesn't actually resonate with this specific buyer.</p>
+          </div>
+        </div>
+        <div class="rule">
+          <div class="rule-num">03</div>
+          <div>
+            <div class="rule-title">Surface weak fits, and change what the system spends effort on</div>
+            <p>A title with no clear path to a purchase decision still appears in the output with a visible flag — but it also gets a short, low-touch line instead of a fully tailored pain angle and opener. A flag that doesn't change downstream behavior is just decoration; this one actually reallocates effort toward the contacts worth the effort.</p>
+          </div>
+        </div>
+        <div class="rule">
+          <div class="rule-num">04</div>
+          <div>
+            <div class="rule-title">Sequence multi-threaded accounts instead of scoring contacts in isolation</div>
+            <p>When two or more contacts from the same company appear in a list, the system doesn't just classify them independently — it recommends who to approach first and why, based on which role is best positioned to gather intel versus which role needs that intel in hand before being approached.</p>
+          </div>
+        </div>
+        <div class="rule">
+          <div class="rule-num">05</div>
+          <div>
+            <div class="rule-title">Output in the format the next step actually uses</div>
+            <p>Structured as a table that drops straight into a CRM or sequencing tool — no reformatting step between the system's output and a rep's next action. Role, proof point, pain angle, and opener as separate columns, not a paragraph to be parsed by hand.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="eyebrow">Why this matters</div>
+    <p>This replaces a judgment call a strong rep makes prospect-by-prospect with a rule set that runs the same way at 5 prospects or 500, in one vertical or five — and gets more useful, not less, as more contacts from the same account show up in the list. The quality of the first pass doesn't degrade as volume or account depth goes up, which is normally exactly where manual personalization breaks down.</p>
+    <div class="callout">[Placeholder — swap in real figures once available: volume processed per run, time saved vs. manual personalization, or reply-rate delta on lists run through this system.]</div>
+  </section>
+
+  <section>
+    <div class="eyebrow">Where this stops</div>
+    <p>This is a top-of-funnel routing and prioritization tool, not a full qualification engine. It generates a role hypothesis and a starting sequence — it doesn't replace discovery. MEDDIC's Decision Criteria and Decision Process, for instance, can only be confirmed through actual conversations; no title-based system should claim to infer them, and this one doesn't try.</p>
+    <p>A production version would go two directions from here: research-augmented personalization that pulls real per-contact signals instead of relying on role-level templates, and outcome-weighted matching that improves its proof-point and reframe choices based on which ones actually generate replies and meetings over time — the system gets sharper with use instead of staying static.</p>
+  </section>
+
+  <section>
+    <div class="eyebrow">Try it — live</div>
+    <h2>Paste a prospect list</h2>
+    <p>Runs against a fictional B2B seller ("Northbridge") with an invented reference-customer roster spanning several industries — this calls a live model to apply the exact rules above to whatever you paste in. Add known account triggers if you have them; leave it blank and the system falls back to the templated approach honestly, rather than inventing a reason that isn't real.</p>
+    <div class="panel">
+      <label class="field-label" for="prospect-input">Prospect list — one per line</label>
+      <textarea id="prospect-input" spellcheck="false">Elena Cross, VP of Operations, Ironbridge Fabrication
+Ravi Patel, IT Manager, Ironbridge Fabrication
+Sam Okafor, Operations Coordinator, Ironbridge Fabrication
+Marcus Webb, Director of Underwriting, Crestpoint Capital
+Priya Nair, CEO, Fernwood Retail</textarea>
+
+      <label class="field-label" for="trigger-input">Known account triggers — optional, one per line</label>
+      <textarea id="trigger-input" spellcheck="false">Ironbridge Fabrication: opened a second manufacturing facility this quarter</textarea>
+
+      <div class="demo-controls">
+        <button class="run-btn" id="run-btn" onclick="runDemo()">Run the router</button>
+        <span class="status" id="status-text"></span>
+      </div>
+      <div class="result-wrap" id="result-wrap" style="display:none;">
+        <div id="account-plans" class="account-plans"></div>
+        <table id="result-table">
+          <thead>
+            <tr>
+              <th>Company</th><th>Name</th><th>Title</th><th>Role</th><th>Proof Point(s)</th><th>Pain Angle / Reframe</th><th>Opener</th>
+            </tr>
+          </thead>
+          <tbody id="result-body"></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <span>Wyatt Boelens — GTM Systems / RevOps</span>
+    <span>Demonstration build · genericized architecture, fictional data</span>
+  </footer>
+
+</div>
+
+<script>
+function escapeHtml(str){
+  const div = document.createElement('div');
+  div.textContent = str == null ? '' : String(str);
+  return div.innerHTML;
+}
+
+async function runDemo(){
+  const btn = document.getElementById('run-btn');
+  const statusEl = document.getElementById('status-text');
+  const resultWrap = document.getElementById('result-wrap');
+  const body = document.getElementById('result-body');
+  const plansEl = document.getElementById('account-plans');
+  const input = document.getElementById('prospect-input').value.trim();
+  const triggers = document.getElementById('trigger-input').value.trim();
+
+  if(!input){
+    statusEl.textContent = 'Paste at least one prospect first.';
+    statusEl.className = 'status err';
+    return;
+  }
+
+  btn.disabled = true;
+  statusEl.className = 'status';
+  statusEl.textContent = 'Routing prospects…';
+  resultWrap.style.display = 'none';
+
+  const instructions = `You are simulating a B2B sales prospect-routing and account-sequencing system for a fictional software vendor called Northbridge, which sells into multiple industries.
+
+Treat every role classification as a hypothesis to be validated in discovery, not an asserted fact — this mirrors real MEDDIC discipline, where labels like "Economic Buyer" or "Champion" are earned through confirmed information, not assumed from a title alone.
+
+Given a list of prospects (name, title, company, in any reasonable format) and an optional list of known account triggers, return a JSON object with exactly two keys: "contacts" and "accountPlans".
+
+CONTACTS — for EACH prospect, produce one object with these exact keys: "company","name","title","role","validateQuestion","proofPoints","painAngle","opener","flag".
+
+1. ROLE — classify into exactly one of: Economic Buyer, Executive Sponsor, Champion, Technical Evaluator, End User.
+   - Economic Buyer: true C-level titles only — Founder, President, Owner, CEO, COO, CFO, CRO, or any "Chief ___ Officer".
+   - Executive Sponsor: VP, SVP, or EVP titles.
+   - Champion: Director or Head-of level in the function most affected by the likely pain.
+   - End User: individual-contributor or coordinator-level titles in that same function.
+   - Technical Evaluator: IT, Security, Ops, Engineering, or Procurement titles, regardless of seniority level.
+   - If a title has no real path to a purchase decision, still assign the closest-fit role but set "flag" to "No clear fit".
+
+2. VALIDATE QUESTION — one short discovery question a rep should actually ask to confirm this role hypothesis before treating it as fact. Specific to the role assigned, not generic.
+
+3. PROOF POINTS — pick 1-2 reference-customer names from this fictional roster, matching the prospect's vertical directly if possible, otherwise the closest adjacent-vertical match. Never recommend the prospect's own company as its own proof point:
+   Manufacturing: Ironbridge Fabrication, Foundry Metalworks
+   Financial Services & Lending: Crestpoint Capital, Anchor Trust
+   Construction: Bedrock Builders, Trailhead Construction
+   Healthcare: Northgate Health, Willowmere Clinical
+   Retail & eCommerce: Fernwood Retail, Havenmark Co.
+   Logistics & Distribution: Portside Logistics, Ridgeline Freight
+   Technology & SaaS: Vantage Cloud, Bracket Systems
+
+4. PAIN ANGLE and OPENER:
+   - If flag is "No clear fit": leave "painAngle" as an empty string, and make "opener" a single short, low-touch line — not a tailored pitch. This is a deliberate downgrade: weak fits get less generation effort, not the same treatment as a real buying-committee member.
+   - If role is Economic Buyer or Executive Sponsor: "painAngle" is a genuine strategic reframe in the style of the Challenger Sale — a specific point of view that challenges how this person likely currently thinks about the problem. Not a generic budget-risk statement, and not a "your peers deal with this too" namedrop.
+   - Otherwise: "painAngle" is one short, role-level sentence naming the priority that role would plausibly care about (Champion: proving internal value; Technical Evaluator: integration/security/feasibility; End User: day-to-day friction). Templated, not researched — do not invent specific personal facts.
+   - "opener" ties the pain angle to a conversation with Northbridge. No corporate filler, no words like "lead" or "prospect" in the copy itself.
+   - TRIGGERS: if a known trigger was provided below for this prospect's company, work it naturally into the opener. If no trigger was provided for their company, do not invent one — use the templated approach honestly.
+
+ACCOUNT PLANS — for any company appearing 2 or more times in the prospect list, add one object to "accountPlans" with keys "company" and "sequence". "sequence" is 1-2 sentences recommending which contact to approach first and why, and how the others should follow — real multi-threading logic (e.g. use an End User or Technical Evaluator to gather intel before opening an Executive Sponsor, or vice versa depending on the mix). Skip companies with only one contact in the list.
+
+Return ONLY valid JSON, no markdown fences, no preamble, no explanation, no trailing commentary.
+
+Prospect list:
+${input}
+
+Known account triggers (optional, may be empty):
+${triggers || "(none provided)"}`;
+
+  try{
+    const response = await fetch("https://api.anthropic.com/v1/messages", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        model: "claude-sonnet-4-6",
+        max_tokens: 1000,
+        messages: [{ role: "user", content: instructions }]
+      })
+    });
+
+    if(!response.ok){
+      throw new Error('Request failed (' + response.status + ')');
+    }
+
+    const data = await response.json();
+    const textBlocks = (data.content || [])
+      .filter(item => item.type === "text")
+      .map(item => item.text)
+      .join("\n");
+
+    const cleaned = textBlocks.replace(/```json/g,'').replace(/```/g,'').trim();
+    const parsed = JSON.parse(cleaned);
+    const contacts = Array.isArray(parsed.contacts) ? parsed.contacts : [];
+    const accountPlans = Array.isArray(parsed.accountPlans) ? parsed.accountPlans : [];
+
+    contacts.sort((a,b) => String(a.company).localeCompare(String(b.company)));
+
+    plansEl.innerHTML = '';
+    accountPlans.forEach(plan => {
+      const card = document.createElement('div');
+      card.className = 'sequence-card';
+      card.innerHTML = `
+        <div class="sequence-company">${escapeHtml(plan.company)} — suggested sequence</div>
+        <div class="sequence-text">${escapeHtml(plan.sequence)}</div>
+      `;
+      plansEl.appendChild(card);
+    });
+
+    body.innerHTML = '';
+    contacts.forEach(row => {
+      const tr = document.createElement('tr');
+      const isLowTouch = row.flag && row.flag.length > 0;
+      const painCell = isLowTouch ? '<span class="low-touch">Low-touch — insufficient signal for a tailored angle</span>' : escapeHtml(row.painAngle);
+      const openerCell = escapeHtml(row.opener) + (isLowTouch ? '<br><span class="flag">⚠ ' + escapeHtml(row.flag) + '</span>' : '');
+      tr.innerHTML = `
+        <td>${escapeHtml(row.company)}</td>
+        <td>${escapeHtml(row.name)}</td>
+        <td>${escapeHtml(row.title)}</td>
+        <td><span class="persona-tag">Likely ${escapeHtml(row.role)}</span><span class="validate-note">Validate: "${escapeHtml(row.validateQuestion)}"</span></td>
+        <td>${escapeHtml(row.proofPoints)}</td>
+        <td>${painCell}</td>
+        <td>${openerCell}</td>
+      `;
+      body.appendChild(tr);
+    });
+
+    resultWrap.style.display = 'block';
+    statusEl.textContent = 'Done — ' + contacts.length + ' prospect' + (contacts.length === 1 ? '' : 's') + ' routed' + (accountPlans.length ? ', ' + accountPlans.length + ' account sequence' + (accountPlans.length === 1 ? '' : 's') + ' generated.' : '.');
+    statusEl.className = 'status';
+  }catch(err){
+    statusEl.textContent = 'Something went wrong running the demo. Try again, or trim the list.';
+    statusEl.className = 'status err';
+    console.error(err);
+  }finally{
+    btn.disabled = false;
+  }
+}
+</script>
+</body>
+</html>
