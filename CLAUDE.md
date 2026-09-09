@@ -25,8 +25,8 @@ All pages share one CSS design language — reuse these exact tokens for anythin
 
 ## Existing case studies
 
-1. **`buying-committee-router.html`** — "The Buying Committee Router." Genericized version of an ICP/persona routing skill, reframed in MEDDIC/buying-committee language (Economic Buyer, Champion, Technical Evaluator, etc.) so it reads as industry-agnostic. Includes a **live interactive demo** that calls the Claude API directly from the page (see the `<script>` block — uses `fetch` to `https://api.anthropic.com/v1/messages`, model `claude-sonnet-4-6`, `max_tokens: 1000`). Fictional company: "Northbridge."
-2. **`two-speed-outreach-system.html`** — "The Two-Speed Outreach System." Genericized architecture case study (diagram + rules only, no live demo) covering a mode-gate design (fast single-touch path vs. full multi-touch campaign path), a two-layer classification approach (function vs. authority), and an honest scored comparison table of the old system vs. the new one before committing to the rebuild.
+1. **`buying-committee-router.html`** — "The Buying Committee Router." Genericized version of an ICP/persona routing skill, reframed in MEDDIC/buying-committee language (Economic Buyer, Champion, Technical Evaluator, etc.) so it reads as industry-agnostic. Static case study (diagram + rules + a static example output table). Fictional company: "Northbridge."
+2. **`two-speed-outreach-system.html`** — "The Two-Speed Outreach System." Genericized architecture case study (diagram + rules only) covering a mode-gate design (fast single-touch path vs. full multi-touch campaign path), a two-layer classification approach (function vs. authority), and an honest scored comparison table of the old system vs. the new one before committing to the rebuild.
 3. **`index.html`** — homepage, lists both case studies as cards linking out to the files above.
 
 ## Open items (things that still need doing, not urgent)
@@ -37,5 +37,5 @@ All pages share one CSS design language — reuse these exact tokens for anythin
 ## Working conventions
 
 - One HTML file per case study, kebab-case filename, added as a new card in `index.html` when created.
-- Single-file HTML (CSS and JS inline, no build step, no external dependencies beyond Google Fonts and, for the live-demo page, the Claude API).
+- Single-file HTML (CSS and JS inline, no build step, no external dependencies beyond Google Fonts).
 - Deploy is automatic via GitHub Pages once changes are pushed to `main` — no separate build/deploy command needed.
