@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<!--
+  Portfolio case study for Wyatt Boelens — genericized version of the
+  subsuite-persona-dna skill. No SubSuite data appears anywhere in this file.
+  The six-part framework and the quality-bar principles are real and mine.
+  The worked example is freshly written for this case study, built to the
+  same standard as the real proven anchor lines but NOT a copy of them —
+  those stay private, since publishing them would mean giving away an
+  earned asset, not just removing a company name from one.
+-->
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Beyond the Battlecard — GTM Systems Case Study</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,500;8..60,600&family=IBM+Plex+Mono:wght@400;500;600&display=swap');
+  :root{
+    --navy-deep:#0F1B2E; --navy-panel:#152640; --navy-panel-2:#1B3050;
+    --grid-line:rgba(138,160,196,0.14); --grid-line-strong:rgba(138,160,196,0.32);
+    --text-primary:#EAF0F8; --text-secondary:#93A8CC; --text-muted:#5E7397;
+    --accent-amber:#E3A94A; --accent-amber-dim:rgba(227,169,74,0.14); --accent-amber-line:rgba(227,169,74,0.55);
+    --border-subtle:rgba(138,160,196,0.22);
+    --font-display:'Space Grotesk', ui-sans-serif, system-ui, sans-serif;
+    --font-body:'Source Serif 4', Georgia, ui-serif, serif;
+    --font-mono:'IBM Plex Mono', ui-monospace, 'SFMono-Regular', monospace;
+  }
+  *{box-sizing:border-box;} html,body{margin:0;padding:0;}
+  body{
+    background:var(--navy-deep); color:var(--text-primary); font-family:var(--font-body); line-height:1.6;
+    background-image:linear-gradient(var(--grid-line) 1px, transparent 1px), linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+    background-size:32px 32px;
+  }
+  .wrap{max-width:860px;margin:0 auto;padding:64px 24px 96px;}
+  .stamp{display:inline-flex;align-items:center;gap:8px;font-family:var(--font-mono);font-size:11px;letter-spacing:0.12em;text-transform:uppercase;color:var(--accent-amber);border:1px solid var(--accent-amber-line);padding:5px 10px;border-radius:2px;background:var(--accent-amber-dim);}
+  h1{font-family:var(--font-display);font-weight:600;font-size:clamp(32px,5vw,48px);line-height:1.08;letter-spacing:-0.01em;margin:20px 0 16px;}
+  .subhead{font-size:18px;color:var(--text-secondary);max-width:660px;margin:0 0 8px;}
+  .demo-tag{font-family:var(--font-mono);font-size:12.5px;color:var(--text-muted);margin-top:20px;padding-top:16px;border-top:1px dashed var(--border-subtle);}
+  section{margin-top:72px;}
+  .eyebrow{font-family:var(--font-mono);font-size:12px;letter-spacing:0.14em;text-transform:uppercase;color:var(--accent-amber);margin-bottom:14px;display:flex;align-items:center;gap:10px;}
+  .eyebrow::after{content:'';flex:1;height:1px;background:var(--grid-line-strong);}
+  h2{font-family:var(--font-display);font-size:24px;font-weight:600;margin:0 0 18px;color:var(--text-primary);}
+  h3{font-family:var(--font-display);font-size:17px;font-weight:600;margin:0 0 10px;color:var(--text-primary);}
+  p{color:var(--text-secondary);font-size:16.5px;margin:0 0 14px;} p:last-child{margin-bottom:0;}
+  .panel{background:var(--navy-panel);border:1px solid var(--border-subtle);border-radius:6px;padding:28px 30px;}
+  .rules{display:flex;flex-direction:column;gap:0;}
+  .rule{display:grid;grid-template-columns:64px 1fr;gap:20px;padding:22px 0;border-top:1px solid var(--border-subtle);}
+  .rule:first-child{border-top:none;padding-top:0;}
+  .rule-num{font-family:var(--font-mono);font-size:13px;color:var(--accent-amber);padding-top:2px;}
+  .rule-title{font-family:var(--font-display);font-size:16.5px;font-weight:600;color:var(--text-primary);margin-bottom:6px;letter-spacing:0.01em;}
+  .rule p{font-size:15.5px;margin-bottom:0;}
+  .callout{border:1px dashed var(--border-subtle);background:transparent;border-radius:6px;padding:18px 22px;font-family:var(--font-mono);font-size:13px;color:var(--text-muted);font-style:italic;margin-top:20px;}
+
+  .compare{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:8px;}
+  .compare-col{border-radius:6px;padding:18px 20px;}
+  .compare-bad{background:rgba(227,138,110,0.08);border:1px solid rgba(227,138,110,0.35);}
+  .compare-good{background:var(--accent-amber-dim);border:1px solid var(--accent-amber-line);}
+  .compare-label{font-family:var(--font-mono);font-size:10.5px;letter-spacing:0.08em;text-transform:uppercase;margin-bottom:10px;}
+  .compare-bad .compare-label{color:#E38A6E;}
+  .compare-good .compare-label{color:var(--accent-amber);}
+  .compare-line{font-family:var(--font-mono);font-size:13.5px;color:var(--text-primary);line-height:1.6;}
+  @media (max-width:600px){ .compare{grid-template-columns:1fr;} }
+
+  .dna-card{background:var(--navy-panel-2);border:1px solid var(--border-subtle);border-radius:6px;padding:22px 24px;margin-top:14px;}
+  .dna-label{font-family:var(--font-mono);font-size:10.5px;letter-spacing:0.08em;text-transform:uppercase;color:var(--accent-amber);margin-bottom:8px;}
+  .dna-card p{font-size:15px;margin-bottom:0;}
+  .dna-card + .dna-card{margin-top:12px;}
+
+  footer{margin-top:88px;padding-top:24px;border-top:1px solid var(--border-subtle);font-family:var(--font-mono);font-size:12px;color:var(--text-muted);display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;}
+  @media (max-width:600px){ .wrap{padding:40px 16px 64px;} section{margin-top:52px;} .rule{grid-template-columns:1fr;gap:6px;} footer{flex-direction:column;} }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="stamp">CASE STUDY — GTM RESEARCH METHODOLOGY</div>
+  <h1>Beyond the Battlecard</h1>
+  <p class="subhead">A framework for building outreach copy that sounds like it was written by someone who's actually sat in the prospect's seat — not just read a one-page battlecard about it.</p>
+  <p class="demo-tag">Genericized for portfolio purposes. The six-part framework and the quality-bar principles below are real and mine. The worked example is freshly written for this page — not a copy of any real, proven line, since publishing those verbatim would mean giving away an earned asset, not just removing a company name.</p>
+
+  <section>
+    <div class="eyebrow">The problem</div>
+    <p>A standard ICP battlecard gives you goals and pains at a glance — enough to write something that's technically relevant. It's rarely enough to write something that reads as though the writer actually understands the job. Most outreach that gets ignored isn't wrong, exactly, it's just generic: it could have been sent to five other titles without changing a word.</p>
+    <p>The gap between "relevant" and "sounds like an insider" isn't effort, it's specificity — the exact number someone reports upward, the word choice that signals fluency versus the word choice that flags a vendor, the objection they've actually heard a dozen times and the honest (not deflected) answer to it.</p>
+  </section>
+
+  <section>
+    <div class="eyebrow">The framework</div>
+    <div class="panel">
+      <div class="rules">
+        <div class="rule">
+          <div class="rule-num">01</div>
+          <div><div class="rule-title">Avatar</div><p>A short sketch of the actual day-to-day and what's weighing on this person right now — not a job description, a lived-in situation.</p></div>
+        </div>
+        <div class="rule">
+          <div class="rule-num">02</div>
+          <div><div class="rule-title">The KPI they report upward</div><p>The specific number that defines "value" to them, precisely worded — precision here matters more than it sounds like it should.</p></div>
+        </div>
+        <div class="rule">
+          <div class="rule-num">03</div>
+          <div><div class="rule-title">Jargon</div><p>The words that signal "this person gets my job" versus the words that flag an outside vendor. Used directly, not paraphrased into safer, more generic language.</p></div>
+        </div>
+        <div class="rule">
+          <div class="rule-num">04</div>
+          <div><div class="rule-title">How they define value</div><p>What actually lands for this specific seat — not a generic benefit statement that could apply to any role in the function.</p></div>
+        </div>
+        <div class="rule">
+          <div class="rule-num">05</div>
+          <div><div class="rule-title">Objections, paired with honest answers</div><p>Real pushback this role actually raises, paired with a defensible response — not a deflection. If the honest answer requires data that isn't available, the rule is to flag that gap rather than invent a number to fill it.</p></div>
+        </div>
+        <div class="rule">
+          <div class="rule-num">06</div>
+          <div><div class="rule-title">Anchor lines</div><p>Proven lines, tested in real conversations — the payoff of the first five sections, not a separate creative exercise bolted on top of them.</p></div>
+        </div>
+        <div class="rule">
+          <div class="rule-num">07</div>
+          <div><div class="rule-title">Pressure-test before delivery</div><p>A well-crafted line that doesn't anticipate the objection it's about to trigger is still flat-footed. Before anything gets delivered, it's read back as the persona would read it — genuinely skeptical — checked against the catalogued objections, and revised if it doesn't already preempt or productively invite the reaction it's walking into. One pass minimum, two at most; if the first pass finds nothing to tighten, that's the answer, not a reason to force a second edit.</p></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="eyebrow">The quality bar</div>
+    <p>One test decides whether a line is actually using the persona work or just referencing it: <strong style="color:var(--text-primary);">would this sentence only make sense to someone in this exact role, or could it apply to any job in the function?</strong> If the answer is the latter, the research didn't actually make it into the copy yet.</p>
+    <div class="compare">
+      <div class="compare-col compare-bad">
+        <div class="compare-label">Could apply to any marketing role</div>
+        <div class="compare-line">"We help you lower acquisition costs and grow your subscriber base."</div>
+      </div>
+      <div class="compare-col compare-good">
+        <div class="compare-label">Only makes sense to this exact seat</div>
+        <div class="compare-line">"Of the acquisition channels you've added this year, which ones are still pulling their weight instead of quietly fading?"</div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="eyebrow">Worked example — Growth Marketer</div>
+    <p>One persona, fully built out, for a fictional subscription-marketplace seller ("Loopline"):</p>
+
+    <div class="dna-card">
+      <div class="dna-label">Avatar</div>
+      <p>Owns the paid acquisition budget and watches CAC weekly, sometimes daily mid-push. Has added two or three "new" channels in the past couple of years — each looked promising for a quarter, then CAC drifted back up as more competitors piled into the same auction. Dreads explaining to leadership why diversification didn't actually move the number.</p>
+    </div>
+    <div class="dna-card">
+      <div class="dna-label">KPI they report upward</div>
+      <p><strong style="color:var(--text-primary);">Blended CAC</strong> — not "average CAC." The distinction matters: blended signals someone thinking about the whole acquisition budget hitting the P&L, not one channel in isolation. Using the wrong term here is a quiet, immediate tell that the message came from outside the function.</p>
+    </div>
+    <div class="dna-card">
+      <div class="dna-label">Jargon (used directly, not softened)</div>
+      <p>Blended CAC, CAC payback period, channel mix, audience saturation, auction dynamics, channel diversification, plateauing. Avoid "marketing spend" — too broad, reads as though it includes brand/content budget rather than the specific paid-media line actually inflating.</p>
+    </div>
+    <div class="dna-card">
+      <div class="dna-label">How they define value</div>
+      <p>A channel that's structurally different from what they're already running — not another platform inside the same auction dynamic. Something with a quantifiable CAC impact they can put on a slide and defend without hand-waving.</p>
+    </div>
+    <div class="dna-card">
+      <div class="dna-label">Objection + honest answer</div>
+      <p><strong style="color:var(--text-primary);">"Won't this just get crowded and expensive over time, like every other channel?"</strong><br>Fair pushback, and the honest answer has to actually engage with it: a channel with no bidding and no auction isn't structurally the same mechanism as paid media, which is the real reason it wouldn't erode the same way — not a marketing claim asserted without a mechanism behind it.</p>
+    </div>
+    <div class="dna-card">
+      <div class="dna-label">First draft</div>
+      <p>"Loopline gives you a growth channel that doesn't behave like a normal paid channel."</p>
+    </div>
+    <div class="dna-card">
+      <div class="dna-label">Pressure-test — read as this skeptical Growth Marketer</div>
+      <p>"Sure, but isn't that what everyone says about every new channel right before it gets crowded and expensive too?" The catalogued objection, and the draft doesn't actually preempt it — it asserts the outcome without naming the mechanism behind it.</p>
+    </div>
+    <div class="dna-card">
+      <div class="dna-label">Revised anchor line</div>
+      <p>"There's no bidding and no auction here — that's the actual mechanism that keeps this from eroding the way paid channels always do, not just a claim about the outcome."</p>
+    </div>
+    <div class="dna-card">
+      <div class="dna-label">Objection check</div>
+      <p>Pressure-tested against: "won't this get crowded and expensive over time too." The original named the right outcome but not the reason for it — revised to lead with the structural mechanism (no auction), which is what actually survives a skeptical read. One pass was enough; a second pass found nothing further to tighten.</p>
+    </div>
+  </section>
+
+  <section>
+    <div class="eyebrow">Why this matters</div>
+    <p>Generic outreach fails quietly — it doesn't bounce, it just doesn't land, and it's hard to tell the difference from the sending side. Building this level of specificity per role is slower than writing a single company-wide template, but it's the difference between copy that reads as informed and copy that reads as a mail merge with a name swapped in.</p>
+  </section>
+
+  <section>
+    <div class="eyebrow">Where this stops</div>
+    <p>This framework supplies content — the words, the angle, the objection handling. It doesn't own tone rules, sequence architecture, or CTA structure, which stay governed separately so persona-specific content never overrides house style. And when an honest answer to an objection would require real data that isn't on hand, the rule is to flag the gap explicitly rather than invent a number that sounds plausible — a persuasive-sounding fabrication is worse than an honest "I'd need to check."</p>
+  </section>
+
+  <footer>
+    <span>Wyatt Boelens — GTM Systems / RevOps</span>
+    <span>Demonstration build · genericized architecture, fictional data</span>
+  </footer>
+
+</div>
+</body>
+</html>
