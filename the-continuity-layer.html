@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<!--
+  Portfolio case study for Wyatt Boelens — genericized version of the
+  daily-pipeline-review-work skill. No SubSuite data appears anywhere in this
+  file. The three-stage model, the soft-no/stalled/closed-lost taxonomy, and
+  the baseline-honesty principle are real and mine; the CRM stage names,
+  specific tool names, and platform names are generalized per Wyatt's own
+  note in the source skill that these are the business-specific parts.
+-->
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Continuity Layer — GTM Systems Case Study</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,500;8..60,600&family=IBM+Plex+Mono:wght@400;500;600&display=swap');
+  :root{
+    --navy-deep:#0F1B2E; --navy-panel:#152640; --navy-panel-2:#1B3050;
+    --grid-line:rgba(138,160,196,0.14); --grid-line-strong:rgba(138,160,196,0.32);
+    --text-primary:#EAF0F8; --text-secondary:#93A8CC; --text-muted:#5E7397;
+    --accent-amber:#E3A94A; --accent-amber-dim:rgba(227,169,74,0.14); --accent-amber-line:rgba(227,169,74,0.55);
+    --border-subtle:rgba(138,160,196,0.22);
+    --font-display:'Space Grotesk', ui-sans-serif, system-ui, sans-serif;
+    --font-body:'Source Serif 4', Georgia, ui-serif, serif;
+    --font-mono:'IBM Plex Mono', ui-monospace, 'SFMono-Regular', monospace;
+  }
+  *{box-sizing:border-box;} html,body{margin:0;padding:0;}
+  body{
+    background:var(--navy-deep); color:var(--text-primary); font-family:var(--font-body); line-height:1.6;
+    background-image:linear-gradient(var(--grid-line) 1px, transparent 1px), linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+    background-size:32px 32px;
+  }
+  .wrap{max-width:860px;margin:0 auto;padding:64px 24px 96px;}
+  .stamp{
+    display:inline-flex;align-items:center;gap:8px;font-family:var(--font-mono);font-size:11px;
+    letter-spacing:0.12em;text-transform:uppercase;color:var(--accent-amber);
+    border:1px solid var(--accent-amber-line);padding:5px 10px;border-radius:2px;background:var(--accent-amber-dim);
+  }
+  h1{font-family:var(--font-display);font-weight:600;font-size:clamp(32px,5vw,48px);line-height:1.08;letter-spacing:-0.01em;margin:20px 0 16px;}
+  .subhead{font-size:18px;color:var(--text-secondary);max-width:660px;margin:0 0 8px;}
+  .demo-tag{font-family:var(--font-mono);font-size:12.5px;color:var(--text-muted);margin-top:20px;padding-top:16px;border-top:1px dashed var(--border-subtle);}
+  section{margin-top:72px;}
+  .eyebrow{font-family:var(--font-mono);font-size:12px;letter-spacing:0.14em;text-transform:uppercase;color:var(--accent-amber);margin-bottom:14px;display:flex;align-items:center;gap:10px;}
+  .eyebrow::after{content:'';flex:1;height:1px;background:var(--grid-line-strong);}
+  h2{font-family:var(--font-display);font-size:24px;font-weight:600;margin:0 0 18px;color:var(--text-primary);}
+  p{color:var(--text-secondary);font-size:16.5px;margin:0 0 14px;} p:last-child{margin-bottom:0;}
+  .panel{background:var(--navy-panel);border:1px solid var(--border-subtle);border-radius:6px;padding:28px 30px;}
+  .diagram-panel{background:var(--navy-panel);border:1px solid var(--border-subtle);border-radius:6px;padding:20px 12px 8px;overflow-x:auto;}
+  .diagram-caption{font-family:var(--font-mono);font-size:11.5px;color:var(--text-muted);text-align:center;margin-top:8px;letter-spacing:0.03em;}
+  .rules{display:flex;flex-direction:column;gap:0;}
+  .rule{display:grid;grid-template-columns:64px 1fr;gap:20px;padding:22px 0;border-top:1px solid var(--border-subtle);}
+  .rule:first-child{border-top:none;padding-top:0;}
+  .rule-num{font-family:var(--font-mono);font-size:13px;color:var(--accent-amber);padding-top:2px;}
+  .rule-title{font-family:var(--font-display);font-size:16.5px;font-weight:600;color:var(--text-primary);margin-bottom:6px;letter-spacing:0.01em;}
+  .rule p{font-size:15.5px;margin-bottom:0;}
+  .callout{border:1px dashed var(--border-subtle);background:transparent;border-radius:6px;padding:18px 22px;font-family:var(--font-mono);font-size:13px;color:var(--text-muted);font-style:italic;margin-top:20px;}
+  footer{margin-top:88px;padding-top:24px;border-top:1px solid var(--border-subtle);font-family:var(--font-mono);font-size:12px;color:var(--text-muted);display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;}
+  @media (max-width:600px){ .wrap{padding:40px 16px 64px;} section{margin-top:52px;} .rule{grid-template-columns:1fr;gap:6px;} footer{flex-direction:column;} }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="stamp">CASE STUDY — SYSTEMS DESIGN</div>
+  <h1>The Continuity Layer</h1>
+  <p class="subhead">A daily prioritization system that carries pipeline context from one day to the next through conversation rather than a synced database — and is explicit about the trust problem that creates, instead of pretending it away.</p>
+  <p class="demo-tag">Genericized reconstruction for portfolio purposes. The stage model, signal taxonomy, and continuity mechanics are real and mine. Specific tool names and exact CRM stage labels are generalized.</p>
+
+  <section>
+    <div class="eyebrow">The problem</div>
+    <p>Most pipeline tools fail in one of two ways. Either they're a dashboard — a status report that tells you what happened but not what to do next — or they're a second system of record that quietly drifts out of sync with the real one, until nobody trusts it enough to actually use it.</p>
+    <p>The harder, more useful problem is building something that decides priority and next action daily, while carrying yesterday's open threads forward — without a live database sync to lean on for certainty. That last part is the actual design challenge: a system built this way has to be honest about what it might have gotten stale, not confident about things it can't actually verify.</p>
+  </section>
+
+  <section>
+    <div class="eyebrow">The daily cycle</div>
+    <div class="diagram-panel">
+      <svg viewBox="0 0 900 620" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;display:block;" role="img" aria-label="Diagram of the daily pipeline review cycle">
+        <defs>
+          <pattern id="bpgrid" width="24" height="24" patternUnits="userSpaceOnUse">
+            <path d="M 24 0 L 0 0 0 24" fill="none" stroke="var(--grid-line)" stroke-width="1"/>
+          </pattern>
+          <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+            <path d="M0,0 L10,5 L0,10 z" fill="var(--accent-amber)"/>
+          </marker>
+        </defs>
+        <rect width="900" height="620" fill="url(#bpgrid)"/>
+
+        <rect x="330" y="40" width="240" height="64" rx="4" fill="var(--navy-panel-2)" stroke="var(--border-subtle)"/>
+        <text x="450" y="66" text-anchor="middle" font-family="var(--font-mono)" font-size="12.5" letter-spacing="0.03em" fill="var(--text-primary)">MORNING KICKOFF</text>
+        <text x="450" y="84" text-anchor="middle" font-family="var(--font-mono)" font-size="10" fill="var(--text-secondary)">pull open threads, prioritize</text>
+
+        <path d="M 540 104 Q 650 180 680 300" fill="none" stroke="var(--accent-amber-line)" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+        <rect x="560" y="304" width="240" height="70" rx="4" fill="var(--navy-panel-2)" stroke="var(--border-subtle)"/>
+        <text x="680" y="332" text-anchor="middle" font-family="var(--font-mono)" font-size="12.5" fill="var(--text-primary)">MID-DAY UPDATES</text>
+        <text x="680" y="350" text-anchor="middle" font-family="var(--font-mono)" font-size="10" fill="var(--text-secondary)">activity in → next action out</text>
+        <path d="M 800 320 C 850 320 850 360 800 360" fill="none" stroke="var(--accent-amber-line)" stroke-width="1.3" marker-end="url(#arrow)"/>
+        <text x="855" y="345" font-family="var(--font-mono)" font-size="9.5" fill="var(--text-muted)">repeats</text>
+        <text x="855" y="357" font-family="var(--font-mono)" font-size="9.5" fill="var(--text-muted)">all day</text>
+
+        <path d="M 560 355 L 340 355" fill="none" stroke="var(--accent-amber-line)" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+        <rect x="100" y="304" width="240" height="70" rx="4" fill="var(--navy-panel-2)" stroke="var(--border-subtle)"/>
+        <text x="220" y="332" text-anchor="middle" font-family="var(--font-mono)" font-size="12.5" fill="var(--text-primary)">CLOSING THE LOOP</text>
+        <text x="220" y="350" text-anchor="middle" font-family="var(--font-mono)" font-size="10" fill="var(--text-secondary)">recap, queue for tomorrow</text>
+
+        <path d="M 220 304 Q 250 180 360 104" fill="none" stroke="var(--accent-amber-line)" stroke-width="1.5" stroke-dasharray="4,3" marker-end="url(#arrow)"/>
+        <text x="230" y="200" font-family="var(--font-mono)" font-size="10" fill="var(--text-muted)">next day</text>
+
+        <line x1="330" y1="72" x2="220" y2="72" stroke="var(--grid-line-strong)" stroke-width="1" stroke-dasharray="3,3"/>
+        <text x="15" y="60" font-family="var(--font-mono)" font-size="10.5" fill="var(--text-muted)">Closed Won = ALL THREE:</text>
+        <text x="15" y="74" font-family="var(--font-mono)" font-size="10.5" fill="var(--text-muted)">agreement + demo + profile</text>
+        <text x="15" y="88" font-family="var(--font-mono)" font-size="10.5" fill="var(--text-muted)">— never one alone</text>
+
+        <line x1="560" y1="339" x2="450" y2="470" stroke="var(--grid-line-strong)" stroke-width="1" stroke-dasharray="3,3"/>
+        <rect x="240" y="474" width="420" height="60" rx="4" fill="var(--accent-amber-dim)" stroke="var(--accent-amber-line)"/>
+        <text x="450" y="498" text-anchor="middle" font-family="var(--font-mono)" font-size="11.5" fill="var(--accent-amber)">throughout: carried state is provisional —</text>
+        <text x="450" y="514" text-anchor="middle" font-family="var(--font-mono)" font-size="11.5" fill="var(--accent-amber)">offer a resync, never assert stale facts</text>
+      </svg>
+      <div class="diagram-caption">a daily rhythm, not a per-prospect decision tree — the cycle repeats, and each day's close is tomorrow's open</div>
+    </div>
+  </section>
+
+  <section>
+    <div class="eyebrow">The architecture</div>
+    <div class="panel">
+      <div class="rules">
+        <div class="rule">
+          <div class="rule-num">01</div>
+          <div>
+            <div class="rule-title">"Closed" requires all three conditions, not one</div>
+            <p>A deal counts as genuinely closed only when every one of three conditions is independently true — not when the easiest or most visible one is. A signed agreement alone isn't the finish line if the operational setup behind it isn't actually done. This is an AND, not an OR, and it's deliberately stricter than what a contract signature alone would suggest.</p>
+          </div>
+        </div>
+        <div class="rule">
+          <div class="rule-num">02</div>
+          <div>
+            <div class="rule-title">Stalled signals get a real taxonomy, not one bucket</div>
+            <p>"I'll circle back when I have time" is not the same as a real no, and it's not the same as an active account still worth pushing on. It gets its own category — parked, not open — pulled out of the active queue without manufacturing a fake next-step date, and only resurfaced if the prospect re-initiates. Collapsing every kind of stall into one undifferentiated "follow up again" bucket is where most pipelines quietly lose track of what's actually still alive.</p>
+          </div>
+        </div>
+        <div class="rule">
+          <div class="rule-num">03</div>
+          <div>
+            <div class="rule-title">Ask only what changes the next action</div>
+            <p>When new activity comes in, the only questions worth asking are ones that change what happens next. A question that just pads out the exchange without altering the resulting action isn't discovery, it's friction — the system should get to a concrete next step quickly, not interview for its own sake.</p>
+          </div>
+        </div>
+        <div class="rule">
+          <div class="rule-num">04</div>
+          <div>
+            <div class="rule-title">Carried state is provisional, not gospel</div>
+            <p>A system that tracks pipeline state through conversation rather than a live database sync has one structural risk: drift. The fix isn't pretending that risk away — it's naming it. When something feels stale, the system says so and offers a low-friction resync rather than asserting a stage with false confidence. That offer stays an offer, never a gate someone has to clear before getting help.</p>
+          </div>
+        </div>
+        <div class="rule">
+          <div class="rule-num">05</div>
+          <div>
+            <div class="rule-title">Decide sequencing, not content — and hand off cleanly</div>
+            <p>This layer prioritizes and sequences. It doesn't draft outreach copy, build profiles, or decide whether an account is worth pursuing — those stay explicit hand-offs to the right place, or a human call, never something this layer quietly absorbs into itself.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="eyebrow">Why this matters</div>
+    <p>The value here isn't perfect data — a system carrying state through conversation instead of a live sync will never have that. The value is staying trustworthy despite imperfect data, by being explicit about where the imperfection is instead of quietly asserting confidence it hasn't earned. That's a harder, more useful problem than building a prettier dashboard on top of data nobody's checked lately.</p>
+  </section>
+
+  <section>
+    <div class="eyebrow">Where this stops</div>
+    <p>This is a prioritization and continuity layer, not a system of record — the deals board, the tracker, and the sequencing tool stay the actual sources of truth, and this sits deliberately one step removed from all of them. It decides what to do next and in what order; it doesn't draft the outreach, build the profile, or decide whether an account is worth pursuing in the first place. Those calls stay explicit hand-offs, not something absorbed quietly into the prioritization layer itself.</p>
+  </section>
+
+  <footer>
+    <span>Wyatt Boelens — GTM Systems / RevOps</span>
+    <span>Demonstration build · genericized architecture, fictional data</span>
+  </footer>
+
+</div>
+</body>
+</html>
