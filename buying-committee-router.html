@@ -1,14 +1,10 @@
 <!DOCTYPE html>
 <!--
-  Portfolio case study for Wyatt Boelens — v3. Adds three fixes on top of the
-  genericized B2B version: (1) role output is framed as a validated hypothesis,
-  not an asserted fact, (2) weak fits get routed to a genuinely lower-touch
-  output instead of just a flag, (3) account-level multi-threading/sequencing
-  for contacts sharing a company, plus an optional known-trigger input and an
-  honest "where this stops" scope section.
-
-  NOTE TO WYATT: the "Why this matters" section still has a placeholder —
-  swap in real metrics once you have them.
+  Portfolio case study for Wyatt Boelens — genericized version of the
+  SubSuite outreach-personalization skill. No SubSuite data appears anywhere
+  in this file. Text bodies rewritten for plain, direct language per Wyatt's
+  editing pass — diagram structure and example table intentionally left
+  untouched this round.
 -->
 <html lang="en">
 <head>
@@ -17,243 +13,76 @@
 <title>The Buying Committee Router — GTM Systems Case Study</title>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,500;8..60,600&family=IBM+Plex+Mono:wght@400;500;600&display=swap');
-
   :root{
-    --navy-deep:#0F1B2E;
-    --navy-panel:#152640;
-    --navy-panel-2:#1B3050;
-    --grid-line:rgba(138,160,196,0.14);
-    --grid-line-strong:rgba(138,160,196,0.32);
-    --text-primary:#EAF0F8;
-    --text-secondary:#93A8CC;
-    --text-muted:#5E7397;
-    --accent-amber:#E3A94A;
-    --accent-amber-dim:rgba(227,169,74,0.14);
-    --accent-amber-line:rgba(227,169,74,0.55);
+    --navy-deep:#0F1B2E; --navy-panel:#152640; --navy-panel-2:#1B3050;
+    --grid-line:rgba(138,160,196,0.14); --grid-line-strong:rgba(138,160,196,0.32);
+    --text-primary:#EAF0F8; --text-secondary:#93A8CC; --text-muted:#5E7397;
+    --accent-amber:#E3A94A; --accent-amber-dim:rgba(227,169,74,0.14); --accent-amber-line:rgba(227,169,74,0.55);
     --border-subtle:rgba(138,160,196,0.22);
     --font-display:'Space Grotesk', ui-sans-serif, system-ui, sans-serif;
     --font-body:'Source Serif 4', Georgia, ui-serif, serif;
     --font-mono:'IBM Plex Mono', ui-monospace, 'SFMono-Regular', monospace;
   }
-
-  *{box-sizing:border-box;}
-  html,body{margin:0;padding:0;}
+  *{box-sizing:border-box;} html,body{margin:0;padding:0;}
   body{
-    background:var(--navy-deep);
-    color:var(--text-primary);
-    font-family:var(--font-body);
-    line-height:1.6;
-    background-image:
-      linear-gradient(var(--grid-line) 1px, transparent 1px),
-      linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+    background:var(--navy-deep); color:var(--text-primary); font-family:var(--font-body); line-height:1.6;
+    background-image:linear-gradient(var(--grid-line) 1px, transparent 1px), linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
     background-size:32px 32px;
   }
-
   .wrap{max-width:840px;margin:0 auto;padding:64px 24px 96px;}
-
-  .stamp{
-    display:inline-flex;align-items:center;gap:8px;
-    font-family:var(--font-mono);
-    font-size:11px;letter-spacing:0.12em;text-transform:uppercase;
-    color:var(--accent-amber);
-    border:1px solid var(--accent-amber-line);
-    padding:5px 10px;border-radius:2px;
-    background:var(--accent-amber-dim);
-  }
-
-  h1{
-    font-family:var(--font-display);
-    font-weight:600;
-    font-size:clamp(32px,5vw,48px);
-    line-height:1.08;
-    letter-spacing:-0.01em;
-    margin:20px 0 16px;
-    color:var(--text-primary);
-  }
-
-  .subhead{
-    font-size:18px;
-    color:var(--text-secondary);
-    max-width:660px;
-    margin:0 0 8px;
-  }
-
-  .demo-tag{
-    font-family:var(--font-mono);
-    font-size:12.5px;
-    color:var(--text-muted);
-    margin-top:20px;
-    padding-top:16px;
-    border-top:1px dashed var(--border-subtle);
-  }
-
+  .stamp{display:inline-flex;align-items:center;gap:8px;font-family:var(--font-mono);font-size:11px;letter-spacing:0.12em;text-transform:uppercase;color:var(--accent-amber);border:1px solid var(--accent-amber-line);padding:5px 10px;border-radius:2px;background:var(--accent-amber-dim);}
+  h1{font-family:var(--font-display);font-weight:600;font-size:clamp(32px,5vw,48px);line-height:1.08;letter-spacing:-0.01em;margin:20px 0 16px;color:var(--text-primary);}
+  .subhead{font-size:18px;color:var(--text-secondary);max-width:660px;margin:0 0 8px;}
+  .demo-tag{font-family:var(--font-mono);font-size:12.5px;color:var(--text-muted);margin-top:20px;padding-top:16px;border-top:1px dashed var(--border-subtle);}
   section{margin-top:72px;}
-
-  .eyebrow{
-    font-family:var(--font-mono);
-    font-size:12px;letter-spacing:0.14em;text-transform:uppercase;
-    color:var(--accent-amber);
-    margin-bottom:14px;
-    display:flex;align-items:center;gap:10px;
-  }
-  .eyebrow::after{
-    content:'';flex:1;height:1px;background:var(--grid-line-strong);
-  }
-
-  h2{
-    font-family:var(--font-display);
-    font-size:26px;font-weight:600;
-    margin:0 0 18px;
-    color:var(--text-primary);
-  }
-
-  p{color:var(--text-secondary);font-size:16.5px;margin:0 0 14px;}
-  p:last-child{margin-bottom:0;}
-
-  .panel{
-    background:var(--navy-panel);
-    border:1px solid var(--border-subtle);
-    border-radius:6px;
-    padding:28px 30px;
-  }
-
-  .diagram-panel{
-    background:var(--navy-panel);
-    border:1px solid var(--border-subtle);
-    border-radius:6px;
-    padding:20px 12px 8px;
-    overflow-x:auto;
-  }
-  .diagram-caption{
-    font-family:var(--font-mono);
-    font-size:11.5px;color:var(--text-muted);
-    text-align:center;margin-top:8px;letter-spacing:0.03em;
-  }
-
+  .eyebrow{font-family:var(--font-mono);font-size:12px;letter-spacing:0.14em;text-transform:uppercase;color:var(--accent-amber);margin-bottom:14px;display:flex;align-items:center;gap:10px;}
+  .eyebrow::after{content:'';flex:1;height:1px;background:var(--grid-line-strong);}
+  h2{font-family:var(--font-display);font-size:26px;font-weight:600;margin:0 0 18px;color:var(--text-primary);}
+  p{color:var(--text-secondary);font-size:16.5px;margin:0 0 14px;} p:last-child{margin-bottom:0;}
+  ul.plain{margin:0 0 14px;padding-left:22px;} ul.plain li{color:var(--text-secondary);font-size:16.5px;margin-bottom:6px;line-height:1.6;}
+  .panel{background:var(--navy-panel);border:1px solid var(--border-subtle);border-radius:6px;padding:28px 30px;}
+  .diagram-panel{background:var(--navy-panel);border:1px solid var(--border-subtle);border-radius:6px;padding:20px 12px 8px;overflow-x:auto;}
+  .diagram-caption{font-family:var(--font-mono);font-size:11.5px;color:var(--text-muted);text-align:center;margin-top:8px;letter-spacing:0.03em;}
   .rules{display:flex;flex-direction:column;gap:0;}
-  .rule{
-    display:grid;grid-template-columns:64px 1fr;gap:20px;
-    padding:22px 0;
-    border-top:1px solid var(--border-subtle);
-  }
+  .rule{display:grid;grid-template-columns:64px 1fr;gap:20px;padding:22px 0;border-top:1px solid var(--border-subtle);}
   .rule:first-child{border-top:none;padding-top:0;}
-  .rule-num{
-    font-family:var(--font-mono);
-    font-size:13px;color:var(--accent-amber);
-    padding-top:2px;
-  }
-  .rule-title{
-    font-family:var(--font-display);
-    font-size:16.5px;font-weight:600;
-    color:var(--text-primary);
-    margin-bottom:6px;
-    letter-spacing:0.01em;
-  }
-  .rule p{font-size:15.5px;margin-bottom:0;}
-
-  .callout{
-    border:1px dashed var(--border-subtle);
-    background:transparent;
-    border-radius:6px;
-    padding:18px 22px;
-    font-family:var(--font-mono);
-    font-size:13px;
-    color:var(--text-muted);
-    font-style:italic;
-    margin-top:20px;
-  }
-
-
-
-
-
-
-  .account-plans{margin-top:24px;display:flex;flex-direction:column;gap:10px;}
-  .sequence-card{
-    border-left:2px solid var(--accent-amber-line);
-    background:var(--navy-deep);
-    border-radius:0 4px 4px 0;
-    padding:12px 16px;
-  }
-  .sequence-company{
-    font-family:var(--font-mono);
-    font-size:11px;letter-spacing:0.05em;text-transform:uppercase;
-    color:var(--accent-amber);
-    margin-bottom:4px;
-  }
-  .sequence-text{font-size:14px;color:var(--text-secondary);}
-
+  .rule-num{font-family:var(--font-mono);font-size:13px;color:var(--accent-amber);padding-top:2px;}
+  .rule-title{font-family:var(--font-display);font-size:16.5px;font-weight:600;color:var(--text-primary);margin-bottom:6px;letter-spacing:0.01em;}
+  .rule p{font-size:15.5px;margin-bottom:6px;} .rule p:last-child{margin-bottom:0;}
+  .rule ul{margin:6px 0 0;padding-left:20px;} .rule ul li{font-size:15px;color:var(--text-secondary);margin-bottom:4px;line-height:1.55;}
+  .callout{border:1px dashed var(--border-subtle);background:transparent;border-radius:6px;padding:18px 22px;font-family:var(--font-mono);font-size:13px;color:var(--text-muted);font-style:italic;margin-top:20px;}
   .result-wrap{margin-top:24px;overflow-x:auto;}
   table{width:100%;border-collapse:collapse;font-size:13.5px;min-width:780px;}
-  th{
-    font-family:var(--font-mono);
-    font-size:10.5px;letter-spacing:0.08em;text-transform:uppercase;
-    text-align:left;color:var(--accent-amber);
-    padding:10px 12px;border-bottom:1px solid var(--accent-amber-line);
-    white-space:nowrap;
-  }
-  td{
-    padding:12px;
-    border-bottom:1px solid var(--border-subtle);
-    color:var(--text-secondary);
-    vertical-align:top;
-  }
+  th{font-family:var(--font-mono);font-size:10.5px;letter-spacing:0.08em;text-transform:uppercase;text-align:left;color:var(--accent-amber);padding:10px 12px;border-bottom:1px solid var(--accent-amber-line);white-space:nowrap;}
+  td{padding:12px;border-bottom:1px solid var(--border-subtle);color:var(--text-secondary);vertical-align:top;}
   tr:last-child td{border-bottom:none;}
-  .persona-tag{
-    font-family:var(--font-mono);
-    font-size:11px;
-    padding:2px 7px;
-    border-radius:2px;
-    border:1px solid var(--accent-amber-line);
-    color:var(--accent-amber);
-    white-space:nowrap;
-    display:inline-block;
-  }
-  .validate-note{
-    display:block;
-    font-size:11px;
-    font-style:italic;
-    color:var(--text-muted);
-    margin-top:6px;
-    max-width:220px;
-  }
-  .flag{color:#E38A6E;font-family:var(--font-mono);font-size:11px;}
-  .low-touch{
-    font-style:italic;
-    color:var(--text-muted);
-    font-size:12.5px;
-  }
-
-  footer{
-    margin-top:88px;
-    padding-top:24px;
-    border-top:1px solid var(--border-subtle);
-    font-family:var(--font-mono);
-    font-size:12px;
-    color:var(--text-muted);
-    display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;
-  }
-
-  @media (max-width:600px){
-    .wrap{padding:40px 16px 64px;}
-    section{margin-top:52px;}
-    .rule{grid-template-columns:1fr;gap:6px;}
-    footer{flex-direction:column;}
-  }
+  .persona-tag{font-family:var(--font-mono);font-size:11px;padding:2px 7px;border-radius:2px;border:1px solid var(--accent-amber-line);color:var(--accent-amber);white-space:nowrap;display:inline-block;}
+  .validate-note{display:block;font-size:11px;font-style:italic;color:var(--text-muted);margin-top:6px;max-width:220px;}
+  .account-plans{margin-top:24px;display:flex;flex-direction:column;gap:10px;}
+  .sequence-card{border-left:2px solid var(--accent-amber-line);background:var(--navy-deep);border-radius:0 4px 4px 0;padding:12px 16px;}
+  .sequence-company{font-family:var(--font-mono);font-size:11px;letter-spacing:0.05em;text-transform:uppercase;color:var(--accent-amber);margin-bottom:4px;}
+  .sequence-text{font-size:14px;color:var(--text-secondary);}
+  footer{margin-top:88px;padding-top:24px;border-top:1px solid var(--border-subtle);font-family:var(--font-mono);font-size:12px;color:var(--text-muted);display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;}
+  @media (max-width:600px){ .wrap{padding:40px 16px 64px;} section{margin-top:52px;} .rule{grid-template-columns:1fr;gap:6px;} footer{flex-direction:column;} }
 </style>
 </head>
 <body>
 <div class="wrap">
 
-  <div class="stamp">REV. 03 — DEMONSTRATION BUILD</div>
+  <div class="stamp">REV. 04 — DEMONSTRATION BUILD</div>
   <h1>The Buying Committee Router</h1>
-  <p class="subhead">A rules-based AI agent that generates a working hypothesis of each contact's buying-committee role, matches them to the right proof point, and sequences multi-threaded accounts — the same logic whether you're selling into manufacturing, financial services, healthcare, construction, or software.</p>
+  <p class="subhead">A tool that reads a list of prospects and figures out, one by one, who's likely to actually make the decision versus who's just in the loop — then writes a first message suited to that role. Built to keep outreach personal at a volume that would normally take additional headcount to manage by hand.</p>
   <p class="demo-tag">Genericized reconstruction for portfolio purposes. The role-classification, sequencing, and proof-point logic is real and mine; the seller, reference customers, and prospects below are fictional.</p>
 
   <section>
     <div class="eyebrow">The problem</div>
-    <p>Personalizing outreach at scale usually forces a bad trade-off: spend real time per prospect figuring out who they are on the buying committee and what they'd actually care about, or send something generic and accept a weaker reply rate. That trade-off gets worse once a list spans multiple industries, multiple contacts at the same account, or both — a title that signals "champion" in one vertical can mean something completely different in another, and two contacts from the same company usually deserve a sequence, not two identical one-off emails.</p>
-    <p>The fix is turning the judgment call a good rep makes instinctively — who is this person on the deal, what do they actually own, what would make them reply, and who should get approached first — into an explicit rule set an agent can apply consistently, without overstating what it actually knows.</p>
+    <p>Tools like ZoomInfo, Apollo, and Sales Navigator are good at finding people who fit a target profile. They don't tell you which of those people actually makes the decision, which ones just influence it, and which ones have no real say — that part still happens by hand, one profile at a time.</p>
+    <p>That manual step is where scale actually breaks:</p>
+    <ul class="plain">
+      <li>Reviewing a hundred contacts one by one to figure out who's worth prioritizing takes real time, even for someone good at it.</li>
+      <li>Skipping that step and messaging everyone the same way gets weaker replies and wastes outreach on people who can't say yes anyway.</li>
+    </ul>
+    <p>This exists to remove that manual step. It takes an already-sourced list and applies the same rules every time to identify each person's likely role, flags the ones that need a second look, and writes a first message suited to that role — without needing additional headcount just to keep up with the review.</p>
   </section>
 
   <section>
@@ -332,36 +161,54 @@
         <div class="rule">
           <div class="rule-num">01</div>
           <div>
-            <div class="rule-title">Classify by buying-committee role — and treat it as a hypothesis, not a fact</div>
-            <p>Only true C-suite (CEO, COO, CFO, CRO, Founder, President, any "Chief ___ Officer") routes to Economic Buyer; VP/SVP/EVP routes to Executive Sponsor; Director/Head-of level in the affected function routes to Champion; IC-level in that function routes to End User; and IT/Security/Ops/Procurement routes to Technical Evaluator regardless of seniority. But every assignment ships with the discovery question that would actually confirm it. A title-based label is an assumption until a real conversation validates it — treating it as settled fact is the exact mistake MEDDIC discipline exists to catch.</p>
+            <div class="rule-title">Title sets a starting guess, not a confirmed fact</div>
+            <ul>
+              <li>True C-suite titles (CEO, CFO, Founder, and similar) are marked as Economic Buyer.</li>
+              <li>VP, SVP, and EVP titles are marked as Executive Sponsor.</li>
+              <li>Directors and Heads in the relevant function are marked as Champion.</li>
+              <li>Individual contributors in that function are marked as End User.</li>
+              <li>IT, Security, Ops, and Procurement titles are marked as Technical Evaluator, regardless of level — who evaluates a tool doesn't scale with seniority the way who approves the budget does.</li>
+            </ul>
+            <p>Every role assignment comes with the specific question a rep should ask to actually confirm it. A title is a strong guess, not proof — MEDDIC discipline exists specifically to stop people from treating a guess as settled fact.</p>
           </div>
         </div>
         <div class="rule">
           <div class="rule-num">02</div>
           <div>
-            <div class="rule-title">Match proof points on segment overlap, not just industry label</div>
-            <p>Check for a same-vertical reference customer first. If none exists, fall back to the closest adjacent match based on comparable buying motion, company size, or operational profile — rather than forcing a same-label reference that doesn't actually resonate with this specific buyer.</p>
+            <div class="rule-title">Use the closest matching reference customer, not just the same industry label</div>
+            <p>First, look for a reference customer in the exact same industry. If there isn't a good one, use the closest match instead — a company of a similar size, or one that sells in a similar way — rather than picking any company in the same industry just because the label matches.</p>
           </div>
         </div>
         <div class="rule">
           <div class="rule-num">03</div>
           <div>
-            <div class="rule-title">Surface weak fits, and change what the system spends effort on</div>
-            <p>A title with no clear path to a purchase decision still appears in the output with a visible flag — but it also gets a short, low-touch line instead of a fully tailored pain angle and opener. A flag that doesn't change downstream behavior is just decoration; this one actually reallocates effort toward the contacts worth the effort.</p>
+            <div class="rule-title">Weak fits get flagged, and they actually get treated differently</div>
+            <p>Weak fits still show up on the list, clearly flagged — but they get a short, simple line instead of a fully written message. A flag that doesn't change what happens next is just decoration. This one does change it: less effort goes toward contacts unlikely to matter, so more time goes toward the ones who do.</p>
           </div>
         </div>
         <div class="rule">
           <div class="rule-num">04</div>
           <div>
-            <div class="rule-title">Sequence multi-threaded accounts instead of scoring contacts in isolation</div>
-            <p>When two or more contacts from the same company appear in a list, the system doesn't just classify them independently — it recommends who to approach first and why, based on which role is best positioned to gather intel versus which role needs that intel in hand before being approached.</p>
+            <div class="rule-title">People at the same company get sequenced together, not scored one by one</div>
+            <p>When two or more people from the same company are on the list, they're not treated as separate, unrelated contacts. The system recommends who to reach out to first — because some roles are better positioned to share useful information early, and that information makes the message to the next person sharper.</p>
           </div>
         </div>
         <div class="rule">
           <div class="rule-num">05</div>
           <div>
-            <div class="rule-title">Output in the format the next step actually uses</div>
-            <p>Structured as a table that drops straight into a CRM or sequencing tool — no reformatting step between the system's output and a rep's next action. Role, proof point, pain angle, and opener as separate columns, not a paragraph to be parsed by hand.</p>
+            <div class="rule-title">Output is a table, ready to use immediately</div>
+            <p>The output is a table, not a paragraph — built to drop straight into a CRM or outreach tool with no extra formatting step. Role, proof point, pain angle, and opening message each get their own column.</p>
+          </div>
+        </div>
+        <div class="rule">
+          <div class="rule-num">06</div>
+          <div>
+            <div class="rule-title">Pull live signals when the list is worth the extra time</div>
+            <ul>
+              <li>Not every prospect needs research, but the system can look one up — recent LinkedIn posts, company news, press releases.</li>
+              <li>When it finds something real and current, that shapes the opening line instead of using a generic one.</li>
+              <li>When it doesn't find anything useful, it says so honestly and falls back to the role-based approach rather than making something up.</li>
+            </ul>
           </div>
         </div>
       </div>
@@ -370,14 +217,13 @@
 
   <section>
     <div class="eyebrow">Why this matters</div>
-    <p>This replaces a judgment call a strong rep makes prospect-by-prospect with a rule set that runs the same way at 5 prospects or 500, in one vertical or five — and gets more useful, not less, as more contacts from the same account show up in the list. The quality of the first pass doesn't degrade as volume or account depth goes up, which is normally exactly where manual personalization breaks down.</p>
-    <div class="callout">[Placeholder — swap in real figures once available: volume processed per run, time saved vs. manual personalization, or reply-rate delta on lists run through this system.]</div>
+    <p>A skilled rep makes this judgment call naturally, prospect by prospect. This turns that same judgment into a rule set that works the same way at 5 prospects or 500 — the quality doesn't drop as the list gets longer, which is usually exactly where manual personalization falls apart.</p>
   </section>
 
   <section>
     <div class="eyebrow">Where this stops</div>
-    <p>This is a top-of-funnel routing and prioritization tool, not a full qualification engine. It generates a role hypothesis and a starting sequence — it doesn't replace discovery. MEDDIC's Decision Criteria and Decision Process, for instance, can only be confirmed through actual conversations; no title-based system should claim to infer them, and this one doesn't try.</p>
-    <p>A production version would go two directions from here: research-augmented personalization that pulls real per-contact signals instead of relying on role-level templates, and outcome-weighted matching that improves its proof-point and reframe choices based on which ones actually generate replies and meetings over time — the system gets sharper with use instead of staying static.</p>
+    <p>This identifies who someone likely is on the deal — it doesn't try to guess what they're currently thinking, and it doesn't replace an actual conversation. MEDDIC's Decision Criteria and Decision Process, for example, can only be confirmed by talking to the prospect directly; no title-based or research-based system should claim to know those in advance, and this one doesn't try.</p>
+    <p>A future version could get sharper with use over time — tracking which proof points and reframes actually get replies, instead of staying static.</p>
   </section>
 
   <section>
@@ -394,51 +240,39 @@
       <div class="result-wrap">
         <table>
           <thead>
-            <tr>
-              <th>Company</th><th>Name</th><th>Title</th><th>Role</th><th>Proof Point(s)</th><th>Pain Angle / Reframe</th><th>Opener</th>
-            </tr>
+            <tr><th>Company</th><th>Name</th><th>Title</th><th>Role</th><th>Proof Point(s)</th><th>Pain Angle / Reframe</th><th>Opener</th></tr>
           </thead>
           <tbody>
             <tr>
-              <td>Ironbridge Fabrication</td>
-              <td>Elena Cross</td>
-              <td>VP of Operations</td>
+              <td>Ironbridge Fabrication</td><td>Elena Cross</td><td>VP of Operations</td>
               <td><span class="persona-tag">Likely Executive Sponsor</span><span class="validate-note">Validate: "Are you the one who signs off on this, or does someone above you need to weigh in?"</span></td>
               <td>Foundry Metalworks</td>
               <td>Most ops leaders measure efficiency in headcount, but the real constraint at a growing plant is how fast decisions turn into action on the floor.</td>
               <td>With a second facility ramping up, keeping decision speed matched to floor execution becomes the real bottleneck — worth a quick conversation?</td>
             </tr>
             <tr>
-              <td>Ironbridge Fabrication</td>
-              <td>Ravi Patel</td>
-              <td>IT Manager</td>
+              <td>Ironbridge Fabrication</td><td>Ravi Patel</td><td>IT Manager</td>
               <td><span class="persona-tag">Likely Technical Evaluator</span><span class="validate-note">Validate: "Would security and integration review sit with you, or does that go through a separate team?"</span></td>
               <td>Foundry Metalworks</td>
               <td>Any new system tends to mean another integration to secure and maintain, on top of an already full plate.</td>
               <td>Curious how integration review usually works on your end before something like this even reaches a pilot.</td>
             </tr>
             <tr>
-              <td>Ironbridge Fabrication</td>
-              <td>Sam Okafor</td>
-              <td>Operations Coordinator</td>
+              <td>Ironbridge Fabrication</td><td>Sam Okafor</td><td>Operations Coordinator</td>
               <td><span class="persona-tag">Likely End User</span><span class="validate-note">Validate: "Are you the one actually running this day to day, or does it roll up to someone else?"</span></td>
               <td>Foundry Metalworks</td>
               <td>The tools that are supposed to save time on the floor often just move the friction somewhere else.</td>
               <td>Would be useful to hear what actually slows you down day to day before assuming what would help.</td>
             </tr>
             <tr>
-              <td>Crestpoint Capital</td>
-              <td>Marcus Webb</td>
-              <td>Director of Underwriting</td>
+              <td>Crestpoint Capital</td><td>Marcus Webb</td><td>Director of Underwriting</td>
               <td><span class="persona-tag">Likely Champion</span><span class="validate-note">Validate: "If this moved forward, would you be the one building the internal case for it?"</span></td>
               <td>Anchor Trust</td>
               <td>Proving the value of a new process internally is usually harder than the process itself.</td>
               <td>What's usually the hardest part of getting a new tool past the finish line internally on your end?</td>
             </tr>
             <tr>
-              <td>Fernwood Retail</td>
-              <td>Priya Nair</td>
-              <td>CEO</td>
+              <td>Fernwood Retail</td><td>Priya Nair</td><td>CEO</td>
               <td><span class="persona-tag">Likely Economic Buyer</span><span class="validate-note">Validate: "Are you personally signing off on tools like this, or does that sit with someone else on your team?"</span></td>
               <td>Havenmark Co.</td>
               <td>Most retail executives treat acquisition and retention as separate budget conversations, but the real cost shows up in how disconnected those two efforts end up looking to the customer.</td>
@@ -456,7 +290,5 @@
   </footer>
 
 </div>
-
-
 </body>
 </html>
