@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<!--
+  Portfolio case study for Wyatt Boelens — showcases the public
+  signal-prospecting-tool repository directly on the site. Content mirrors the
+  repo's README, SPEC.md and prompts (MIT licensed, no confidential data).
+  Same structure and design system as the other case studies.
+-->
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Signal Prospecting Tool — GTM Systems Case Study</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,500;8..60,600&family=IBM+Plex+Mono:wght@400;500;600&display=swap');
+  :root{
+    --navy-deep:#0F1B2E; --navy-panel:#152640; --navy-panel-2:#1B3050;
+    --grid-line:rgba(138,160,196,0.14); --grid-line-strong:rgba(138,160,196,0.32);
+    --text-primary:#EAF0F8; --text-secondary:#93A8CC; --text-muted:#5E7397;
+    --accent-amber:#E3A94A; --accent-amber-dim:rgba(227,169,74,0.14); --accent-amber-line:rgba(227,169,74,0.55);
+    --border-subtle:rgba(138,160,196,0.22);
+    --font-display:'Space Grotesk', ui-sans-serif, system-ui, sans-serif;
+    --font-body:'Source Serif 4', Georgia, ui-serif, serif;
+    --font-mono:'IBM Plex Mono', ui-monospace, 'SFMono-Regular', monospace;
+  }
+  *{box-sizing:border-box;} html,body{margin:0;padding:0;}
+  body{
+    background:var(--navy-deep); color:var(--text-primary); font-family:var(--font-body); line-height:1.6;
+    background-image:linear-gradient(var(--grid-line) 1px, transparent 1px), linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+    background-size:32px 32px;
+  }
+  .wrap{max-width:860px;margin:0 auto;padding:64px 24px 96px;}
+  .stamp{display:inline-flex;align-items:center;gap:8px;font-family:var(--font-mono);font-size:11px;letter-spacing:0.12em;text-transform:uppercase;color:var(--accent-amber);border:1px solid var(--accent-amber-line);padding:5px 10px;border-radius:2px;background:var(--accent-amber-dim);}
+  h1{font-family:var(--font-display);font-weight:600;font-size:clamp(32px,5vw,48px);line-height:1.08;letter-spacing:-0.01em;margin:20px 0 16px;color:var(--text-primary);}
+  .subhead{font-size:18px;color:var(--text-secondary);max-width:660px;margin:0 0 8px;}
+  .demo-tag{font-family:var(--font-mono);font-size:12.5px;color:var(--text-muted);margin-top:20px;padding-top:16px;border-top:1px dashed var(--border-subtle);}
+  section{margin-top:72px;}
+  .eyebrow{font-family:var(--font-mono);font-size:12px;letter-spacing:0.14em;text-transform:uppercase;color:var(--accent-amber);margin-bottom:14px;display:flex;align-items:center;gap:10px;}
+  .eyebrow::after{content:'';flex:1;height:1px;background:var(--grid-line-strong);}
+  h2{font-family:var(--font-display);font-size:24px;font-weight:600;margin:0 0 18px;color:var(--text-primary);}
+  p{color:var(--text-secondary);font-size:16.5px;margin:0 0 14px;} p:last-child{margin-bottom:0;}
+  ul.plain,ol.plain{margin:0 0 14px;padding-left:22px;} ul.plain li,ol.plain li{color:var(--text-secondary);font-size:16px;margin-bottom:8px;line-height:1.6;}
+  ul.plain li strong,ol.plain li strong{color:var(--text-primary);font-weight:600;}
+  code{font-family:var(--font-mono);font-size:0.88em;color:var(--text-primary);}
+  .mini-label{font-family:var(--font-mono);font-size:11.5px;letter-spacing:0.1em;text-transform:uppercase;color:var(--text-muted);margin:28px 0 10px;}
+  .panel{background:var(--navy-panel);border:1px solid var(--border-subtle);border-radius:6px;padding:28px 30px;}
+  .diagram-panel{background:var(--navy-panel);border:1px solid var(--border-subtle);border-radius:6px;padding:20px 12px 8px;overflow-x:auto;margin-top:18px;}
+  .diagram-caption{font-family:var(--font-mono);font-size:11.5px;color:var(--text-muted);text-align:center;margin-top:8px;letter-spacing:0.03em;}
+  .rules{display:flex;flex-direction:column;gap:0;}
+  .rule{display:grid;grid-template-columns:64px 1fr;gap:20px;padding:22px 0;border-top:1px solid var(--border-subtle);}
+  .rule:first-child{border-top:none;padding-top:0;}
+  .rule-num{font-family:var(--font-mono);font-size:13px;color:var(--accent-amber);padding-top:2px;}
+  .rule-title{font-family:var(--font-display);font-size:16.5px;font-weight:600;color:var(--text-primary);margin-bottom:6px;letter-spacing:0.01em;}
+  .rule p{font-size:15.5px;margin-bottom:0;}
+
+  .stops{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:8px;}
+  .stop{background:var(--navy-panel-2);border:1px solid var(--border-subtle);border-radius:6px;padding:16px 18px;}
+  .stop-code{font-family:var(--font-mono);font-size:11px;letter-spacing:0.1em;color:var(--accent-amber);margin-bottom:4px;}
+  .stop-title{font-family:var(--font-display);font-size:15.5px;font-weight:600;color:var(--text-primary);margin-bottom:6px;}
+  .stop p{font-size:14px;line-height:1.55;margin:0;}
+
+  .result-wrap{overflow-x:auto;margin-top:4px;}
+  table.simple{width:100%;border-collapse:collapse;font-size:14px;min-width:520px;}
+  table.simple th{font-family:var(--font-mono);font-size:10.5px;letter-spacing:0.08em;text-transform:uppercase;text-align:left;color:var(--accent-amber);padding:10px 12px;border-bottom:1px solid var(--accent-amber-line);white-space:nowrap;}
+  table.simple td{padding:11px 12px;border-bottom:1px solid var(--border-subtle);color:var(--text-secondary);vertical-align:top;}
+  table.simple td:first-child{font-family:var(--font-mono);font-size:12.5px;color:var(--text-primary);white-space:nowrap;}
+  table.simple tr:last-child td{border-bottom:none;}
+
+  .file-viewer{background:var(--navy-panel);border:1px solid var(--border-subtle);border-radius:6px;overflow:hidden;margin-top:14px;}
+  .file-tab{font-family:var(--font-mono);font-size:12.5px;color:var(--text-secondary);background:var(--navy-panel-2);padding:12px 20px;border-bottom:1px solid var(--border-subtle);display:flex;align-items:center;gap:8px;}
+  .file-tab::before{content:'';width:8px;height:8px;border-radius:50%;background:var(--accent-amber);display:inline-block;}
+  pre.prompt{margin:0;padding:20px 24px;font-family:var(--font-mono);font-size:13px;line-height:1.7;color:var(--text-secondary);white-space:pre-wrap;word-break:break-word;}
+  pre.tree{margin:0;padding:20px 24px;font-family:var(--font-mono);font-size:12.5px;line-height:1.75;color:var(--text-secondary);overflow-x:auto;}
+
+  .gh-link{display:inline-flex;align-items:center;gap:8px;font-family:var(--font-mono);font-size:12.5px;color:var(--accent-amber);text-decoration:none;border:1px solid var(--accent-amber-line);padding:9px 16px;border-radius:4px;background:var(--accent-amber-dim);margin-top:18px;}
+  .gh-link:hover{background:rgba(227,169,74,0.24);}
+  .gh-link:focus-visible{outline:2px solid var(--accent-amber-line);outline-offset:2px;}
+
+  footer{margin-top:88px;padding-top:24px;border-top:1px solid var(--border-subtle);font-family:var(--font-mono);font-size:12px;color:var(--text-muted);display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;}
+  @media (max-width:600px){ .wrap{padding:40px 16px 64px;} section{margin-top:52px;} .rule{grid-template-columns:1fr;gap:6px;} .stops{grid-template-columns:1fr;} .panel{padding:22px 18px;} pre.prompt,pre.tree{padding:16px 16px;} footer{flex-direction:column;} }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="stamp">CASE STUDY — SIGNAL-BASED OUTBOUND</div>
+  <h1>Signal Prospecting Tool</h1>
+  <p class="subhead">A signal-based outbound system run by Claude with Apollo and a Google Sheet. It finds the moment an account is most likely to say yes, proves it with a dated public source, routes it to the person who can act, and hands a rep a short list to approve before anything is sent.</p>
+  <p class="demo-tag">A public, ready-to-use template, MIT licensed. This one is the real thing, not a reconstruction: the rules, the Sheet template and the prompts below are the actual files in the repository. Anything company-specific is left as a [bracketed placeholder]. Built on lessons from an internal dry run.</p>
+  <a class="gh-link" href="https://github.com/wyatt-boelens/signal-prospecting-tool">↗ View the repository on GitHub</a>
+
+  <section>
+    <div class="eyebrow">The problem</div>
+    <p>Outbound usually runs on fit alone: the right kind of company, contacted whenever the list gets to it. Timing is the missing half. A leader who just changed jobs, a company that just launched a program, a role that was just posted — each marks a moment when a message is far more likely to land.</p>
+    <p>But timing signals fail in familiar ways. A "signal" with no dated source is really a guess. Hits pile up on accounts a rep is already working. A confident-sounding message quietly leans on a claim nobody confirmed. And nothing in the process ever shows whether any of it beats plain outreach.</p>
+    <p>This tool turns each of those failure modes into a rule Claude checks on every run — timing on top of fit, never instead of it — and keeps a person in the loop for every send.</p>
+  </section>
+
+  <section>
+    <div class="eyebrow">How a hit moves through the system</div>
+    <div class="diagram-panel">
+      <svg viewBox="0 0 960 900" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;display:block;" role="img" aria-label="Flow diagram showing how a signal hit moves from detection through ten hard stops, rep approval, an Apollo task, sending, results and monthly learning">
+        <defs>
+          <pattern id="bpgrid1" width="24" height="24" patternUnits="userSpaceOnUse">
+            <path d="M 24 0 L 0 0 0 24" fill="none" stroke="var(--grid-line)" stroke-width="1"/>
+          </pattern>
+          <marker id="arrow1" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+            <path d="M0,0 L10,5 L0,10 z" fill="var(--accent-amber)"/>
+          </marker>
+        </defs>
+        <rect width="960" height="900" fill="url(#bpgrid1)"/>
+
+        <rect x="360" y="20" width="240" height="56" rx="4" fill="var(--navy-panel-2)" stroke="var(--border-subtle)"/>
+        <text x="480" y="44" text-anchor="middle" font-family="var(--font-mono)" font-size="12.5" letter-spacing="0.04em" fill="var(--text-primary)">DETECT</text>
+        <text x="480" y="62" text-anchor="middle" font-family="var(--font-mono)" font-size="10" fill="var(--text-secondary)">weekly, per rep · event-first</text>
+        <line x1="480" y1="76" x2="480" y2="110" stroke="var(--accent-amber-line)" stroke-width="1.5" marker-end="url(#arrow1)"/>
+
+        <polygon points="480,112 620,170 480,228 340,170" fill="var(--navy-panel-2)" stroke="var(--accent-amber-line)" stroke-width="1.5"/>
+        <text x="480" y="166" text-anchor="middle" font-family="var(--font-mono)" font-size="11.5" fill="var(--text-primary)">PASS ALL 10</text>
+        <text x="480" y="181" text-anchor="middle" font-family="var(--font-mono)" font-size="11.5" fill="var(--text-primary)">HARD STOPS?</text>
+
+        <line x1="620" y1="170" x2="696" y2="170" stroke="var(--accent-amber-line)" stroke-width="1.5" marker-end="url(#arrow1)"/>
+        <text x="650" y="162" font-family="var(--font-mono)" font-size="11" fill="var(--accent-amber)">NO</text>
+        <rect x="700" y="146" width="210" height="48" rx="4" fill="var(--navy-panel-2)" stroke="var(--border-subtle)"/>
+        <text x="805" y="168" text-anchor="middle" font-family="var(--font-mono)" font-size="12" letter-spacing="0.04em" fill="var(--text-primary)">DROPPED</text>
+        <text x="805" y="184" text-anchor="middle" font-family="var(--font-mono)" font-size="10" fill="var(--text-secondary)">fail any one = out</text>
+
+        <line x1="480" y1="228" x2="480" y2="264" stroke="var(--accent-amber-line)" stroke-width="1.5" marker-end="url(#arrow1)"/>
+        <text x="492" y="250" font-family="var(--font-mono)" font-size="11" fill="var(--accent-amber)">YES</text>
+
+        <rect x="330" y="266" width="300" height="62" rx="4" fill="var(--navy-panel-2)" stroke="var(--border-subtle)"/>
+        <text x="480" y="292" text-anchor="middle" font-family="var(--font-mono)" font-size="12.5" letter-spacing="0.04em" fill="var(--text-primary)">LOG ROW</text>
+        <text x="480" y="311" text-anchor="middle" font-family="var(--font-mono)" font-size="10" fill="var(--text-secondary)">one row per hit · max 10 per rep per run</text>
+        <line x1="630" y1="297" x2="668" y2="297" stroke="var(--grid-line-strong)" stroke-width="1" stroke-dasharray="3,3"/>
+        <text x="674" y="288" font-family="var(--font-mono)" font-size="10.5" fill="var(--text-muted)">sheet self-calculates:</text>
+        <text x="674" y="301" font-family="var(--font-mono)" font-size="10.5" fill="var(--text-muted)">days old, stage, signal,</text>
+        <text x="674" y="314" font-family="var(--font-mono)" font-size="10.5" fill="var(--text-muted)">angle, freshness check</text>
+        <line x1="480" y1="328" x2="480" y2="364" stroke="var(--accent-amber-line)" stroke-width="1.5" marker-end="url(#arrow1)"/>
+
+        <polygon points="480,366 620,424 480,482 340,424" fill="var(--navy-panel-2)" stroke="var(--accent-amber-line)" stroke-width="1.5"/>
+        <text x="480" y="420" text-anchor="middle" font-family="var(--font-mono)" font-size="11.5" fill="var(--text-primary)">REP SETS</text>
+        <text x="480" y="435" text-anchor="middle" font-family="var(--font-mono)" font-size="11.5" fill="var(--text-primary)">COLUMN O = Y?</text>
+
+        <line x1="620" y1="424" x2="696" y2="424" stroke="var(--accent-amber-line)" stroke-width="1.5" marker-end="url(#arrow1)"/>
+        <text x="650" y="416" font-family="var(--font-mono)" font-size="11" fill="var(--accent-amber)">NO</text>
+        <rect x="700" y="400" width="210" height="48" rx="4" fill="var(--navy-panel-2)" stroke="var(--border-subtle)"/>
+        <text x="805" y="422" text-anchor="middle" font-family="var(--font-mono)" font-size="12" letter-spacing="0.04em" fill="var(--text-primary)">NOTHING MOVES</text>
+        <text x="805" y="438" text-anchor="middle" font-family="var(--font-mono)" font-size="10" fill="var(--text-secondary)">without a Y</text>
+
+        <line x1="480" y1="482" x2="480" y2="518" stroke="var(--accent-amber-line)" stroke-width="1.5" marker-end="url(#arrow1)"/>
+        <text x="492" y="504" font-family="var(--font-mono)" font-size="11" fill="var(--accent-amber)">YES</text>
+
+        <rect x="330" y="520" width="300" height="62" rx="4" fill="var(--navy-panel-2)" stroke="var(--border-subtle)"/>
+        <text x="480" y="546" text-anchor="middle" font-family="var(--font-mono)" font-size="12.5" letter-spacing="0.04em" fill="var(--text-primary)">APOLLO TASK</text>
+        <text x="480" y="565" text-anchor="middle" font-family="var(--font-mono)" font-size="10" fill="var(--text-secondary)">task for the rep · contact on touched list</text>
+        <line x1="480" y1="582" x2="480" y2="618" stroke="var(--accent-amber-line)" stroke-width="1.5" marker-end="url(#arrow1)"/>
+
+        <rect x="330" y="620" width="300" height="56" rx="4" fill="var(--navy-panel-2)" stroke="var(--border-subtle)"/>
+        <text x="480" y="644" text-anchor="middle" font-family="var(--font-mono)" font-size="12.5" letter-spacing="0.04em" fill="var(--text-primary)">REP SENDS</text>
+        <text x="480" y="662" text-anchor="middle" font-family="var(--font-mono)" font-size="10" fill="var(--text-secondary)">from their own inbox · logs date sent</text>
+        <line x1="480" y1="676" x2="480" y2="712" stroke="var(--accent-amber-line)" stroke-width="1.5" marker-end="url(#arrow1)"/>
+
+        <rect x="330" y="714" width="300" height="60" rx="4" fill="var(--navy-panel-2)" stroke="var(--border-subtle)"/>
+        <text x="480" y="741" text-anchor="middle" font-family="var(--font-mono)" font-size="12.5" letter-spacing="0.04em" fill="var(--text-primary)">RESULTS · +14 DAYS</text>
+        <text x="480" y="760" text-anchor="middle" font-family="var(--font-mono)" font-size="10" fill="var(--text-secondary)">reads the actual reply text in Gmail</text>
+        <line x1="630" y1="744" x2="668" y2="744" stroke="var(--grid-line-strong)" stroke-width="1" stroke-dasharray="3,3"/>
+        <text x="674" y="735" font-family="var(--font-mono)" font-size="10.5" fill="var(--text-muted)">Apollo's replied count</text>
+        <text x="674" y="748" font-family="var(--font-mono)" font-size="10.5" fill="var(--text-muted)">includes bounces and</text>
+        <text x="674" y="761" font-family="var(--font-mono)" font-size="10.5" fill="var(--text-muted)">auto-replies, so it's</text>
+        <text x="674" y="774" font-family="var(--font-mono)" font-size="10.5" fill="var(--text-muted)">not the measure</text>
+        <line x1="480" y1="774" x2="480" y2="810" stroke="var(--accent-amber-line)" stroke-width="1.5" marker-end="url(#arrow1)"/>
+
+        <rect x="330" y="812" width="300" height="62" rx="4" fill="var(--accent-amber-dim)" stroke="var(--accent-amber-line)"/>
+        <text x="480" y="839" text-anchor="middle" font-family="var(--font-mono)" font-size="12.5" letter-spacing="0.04em" fill="var(--accent-amber)">LEARN · MONTHLY</text>
+        <text x="480" y="858" text-anchor="middle" font-family="var(--font-mono)" font-size="10" fill="var(--text-secondary)">Scoreboard: Proven or Cut</text>
+
+        <path d="M 330 843 C 110 843 110 48 360 48" fill="none" stroke="var(--accent-amber-line)" stroke-width="1.5" stroke-dasharray="4,3" marker-end="url(#arrow1)"/>
+        <text x="14" y="396" font-family="var(--font-mono)" font-size="10.5" fill="var(--text-muted)">Proven signals stay</text>
+        <text x="14" y="410" font-family="var(--font-mono)" font-size="10.5" fill="var(--text-muted)">Active; Cut or reworked</text>
+        <text x="14" y="424" font-family="var(--font-mono)" font-size="10.5" fill="var(--text-muted)">signals go back to</text>
+        <text x="14" y="438" font-family="var(--font-mono)" font-size="10.5" fill="var(--text-muted)">the Signals library</text>
+      </svg>
+      <div class="diagram-caption">every hit travels the same path — failing any hard stop drops it, and nothing moves without a rep's Y</div>
+    </div>
+  </section>
+
+  <section>
+    <div class="eyebrow">Where everything lives</div>
+    <p>No code to deploy. The "tool" is three parts that Claude reads and writes each run, each with a different owner. Facts that change as a company grows live in the Sheet, where one cell updates them. The rules change rarely, and only through the Admin.</p>
+    <div class="diagram-panel">
+      <svg viewBox="0 0 960 500" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;display:block;" role="img" aria-label="Diagram showing Claude at the center reading rules from SPEC.md, reading and writing data in a Google Sheet, and writing to an Apollo contacts list, using four connectors">
+        <defs>
+          <pattern id="bpgrid2" width="24" height="24" patternUnits="userSpaceOnUse">
+            <path d="M 24 0 L 0 0 0 24" fill="none" stroke="var(--grid-line)" stroke-width="1"/>
+          </pattern>
+          <marker id="arrow2" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+            <path d="M0,0 L10,5 L0,10 z" fill="var(--accent-amber)"/>
+          </marker>
+        </defs>
+        <rect width="960" height="500" fill="url(#bpgrid2)"/>
+
+        <text x="498" y="24" text-anchor="middle" font-family="var(--font-mono)" font-size="10.5" letter-spacing="0.08em" fill="var(--text-muted)">CONNECTORS CLAUDE NEEDS</text>
+        <rect x="240" y="34" width="110" height="32" rx="3" fill="var(--navy-panel-2)" stroke="var(--border-subtle)"/>
+        <text x="295" y="54" text-anchor="middle" font-family="var(--font-mono)" font-size="11.5" fill="var(--text-primary)">Apollo</text>
+        <rect x="362" y="34" width="110" height="32" rx="3" fill="var(--navy-panel-2)" stroke="var(--border-subtle)"/>
+        <text x="417" y="54" text-anchor="middle" font-family="var(--font-mono)" font-size="11.5" fill="var(--text-primary)">Gmail</text>
+        <rect x="484" y="34" width="130" height="32" rx="3" fill="var(--navy-panel-2)" stroke="var(--border-subtle)"/>
+        <text x="549" y="54" text-anchor="middle" font-family="var(--font-mono)" font-size="11.5" fill="var(--text-primary)">Google Sheets</text>
+        <rect x="626" y="34" width="130" height="32" rx="3" fill="var(--navy-panel-2)" stroke="var(--border-subtle)"/>
+        <text x="691" y="54" text-anchor="middle" font-family="var(--font-mono)" font-size="11.5" fill="var(--text-primary)">Google Drive</text>
+        <line x1="480" y1="66" x2="480" y2="196" stroke="var(--grid-line-strong)" stroke-width="1" stroke-dasharray="3,3" marker-end="url(#arrow2)"/>
+
+        <rect x="380" y="198" width="200" height="92" rx="4" fill="var(--accent-amber-dim)" stroke="var(--accent-amber-line)"/>
+        <text x="480" y="232" text-anchor="middle" font-family="var(--font-mono)" font-size="14" letter-spacing="0.06em" fill="var(--accent-amber)">CLAUDE</text>
+        <text x="480" y="252" text-anchor="middle" font-family="var(--font-mono)" font-size="10.5" fill="var(--text-secondary)">reads the rules + data</text>
+        <text x="480" y="268" text-anchor="middle" font-family="var(--font-mono)" font-size="10.5" fill="var(--text-secondary)">writes rows + tasks</text>
+
+        <rect x="40" y="194" width="250" height="100" rx="4" fill="var(--navy-panel-2)" stroke="var(--border-subtle)"/>
+        <text x="165" y="228" text-anchor="middle" font-family="var(--font-mono)" font-size="13" letter-spacing="0.06em" fill="var(--text-primary)">RULES</text>
+        <text x="165" y="250" text-anchor="middle" font-family="var(--font-mono)" font-size="10.5" fill="var(--text-secondary)">SPEC.md in a Claude Project</text>
+        <text x="165" y="268" text-anchor="middle" font-family="var(--font-mono)" font-size="10.5" fill="var(--text-muted)">changes: Admin only</text>
+        <line x1="290" y1="244" x2="378" y2="244" stroke="var(--accent-amber-line)" stroke-width="1.5" marker-end="url(#arrow2)"/>
+        <text x="334" y="236" text-anchor="middle" font-family="var(--font-mono)" font-size="9.5" fill="var(--text-muted)">reads</text>
+
+        <rect x="670" y="194" width="250" height="100" rx="4" fill="var(--navy-panel-2)" stroke="var(--border-subtle)"/>
+        <text x="795" y="228" text-anchor="middle" font-family="var(--font-mono)" font-size="13" letter-spacing="0.06em" fill="var(--text-primary)">DATA</text>
+        <text x="795" y="250" text-anchor="middle" font-family="var(--font-mono)" font-size="10.5" fill="var(--text-secondary)">Google Sheet · 7 tabs</text>
+        <text x="795" y="268" text-anchor="middle" font-family="var(--font-mono)" font-size="10.5" fill="var(--text-muted)">changes: tool + reps</text>
+        <line x1="582" y1="244" x2="668" y2="244" stroke="var(--accent-amber-line)" stroke-width="1.5" marker-start="url(#arrow2)" marker-end="url(#arrow2)"/>
+        <text x="625" y="236" text-anchor="middle" font-family="var(--font-mono)" font-size="9.5" fill="var(--text-muted)">read/write</text>
+
+        <rect x="380" y="380" width="200" height="92" rx="4" fill="var(--navy-panel-2)" stroke="var(--border-subtle)"/>
+        <text x="480" y="414" text-anchor="middle" font-family="var(--font-mono)" font-size="13" letter-spacing="0.06em" fill="var(--text-primary)">TRACKING</text>
+        <text x="480" y="436" text-anchor="middle" font-family="var(--font-mono)" font-size="10.5" fill="var(--text-secondary)">Apollo contacts list</text>
+        <text x="480" y="454" text-anchor="middle" font-family="var(--font-mono)" font-size="10.5" fill="var(--text-muted)">changes: tool, after approval</text>
+        <line x1="480" y1="290" x2="480" y2="378" stroke="var(--accent-amber-line)" stroke-width="1.5" marker-end="url(#arrow2)"/>
+        <text x="492" y="338" font-family="var(--font-mono)" font-size="9.5" fill="var(--text-muted)">after approval</text>
+      </svg>
+      <div class="diagram-caption">three parts, three owners — Claude reads and writes across all of them each run</div>
+    </div>
+
+    <div class="mini-label">The Sheet's seven tabs</div>
+    <div class="panel">
+      <div class="result-wrap">
+        <table class="simple">
+          <thead><tr><th>Tab</th><th>What it holds</th></tr></thead>
+          <tbody>
+            <tr><td>Start Here</td><td>Onboarding, the weekly routine, and the copy-paste prompts.</td></tr>
+            <tr><td>Log</td><td>One row per signal hit. The working surface for the tool and the reps.</td></tr>
+            <tr><td>Signals</td><td>The signal library, with exactly one copy. Admin only.</td></tr>
+            <tr><td>Scoreboard</td><td>Per-signal counts, positive rate and status, plus the kill rule and stage thresholds.</td></tr>
+            <tr><td>Claims</td><td>Approved claim wording. The tool uses only rows with Status = Confirmed.</td></tr>
+            <tr><td>Peer Proof</td><td>Customers with revenue and stage. The tool names one only if OK to cite = Y.</td></tr>
+            <tr><td>Reps</td><td>Who runs the tool: their sending inbox, role and segment.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="eyebrow">Who writes what</div>
+    <p>Every Log row carries the rep's name in column W, and a rep only approves and acts on their own rows. Cooldowns and exclusions apply across all reps, and the first rep to log an account owns it — if another rep already has a row for it, the tool skips it and tells the Admin.</p>
+    <div class="diagram-panel">
+      <svg viewBox="0 0 960 230" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;display:block;" role="img" aria-label="Strip diagram of the key Log columns grouped by who writes them: the tool, the rep, or the sheet itself">
+        <defs>
+          <pattern id="bpgrid3" width="24" height="24" patternUnits="userSpaceOnUse">
+            <path d="M 24 0 L 0 0 0 24" fill="none" stroke="var(--grid-line)" stroke-width="1"/>
+          </pattern>
+        </defs>
+        <rect width="960" height="230" fill="url(#bpgrid3)"/>
+
+        <rect x="27" y="30" width="230" height="84" rx="4" fill="var(--accent-amber-dim)" stroke="var(--accent-amber-line)"/>
+        <text x="142" y="60" text-anchor="middle" font-family="var(--font-mono)" font-size="15" fill="var(--accent-amber)">A–N</text>
+        <text x="142" y="86" text-anchor="middle" font-family="var(--font-mono)" font-size="10" letter-spacing="0.04em" fill="var(--text-secondary)">TOOL LOGS THE HIT</text>
+
+        <rect x="263" y="30" width="84" height="84" rx="4" fill="var(--navy-panel-2)" stroke="var(--text-secondary)"/>
+        <text x="305" y="60" text-anchor="middle" font-family="var(--font-mono)" font-size="15" fill="var(--text-primary)">O</text>
+        <text x="305" y="82" text-anchor="middle" font-family="var(--font-mono)" font-size="10" letter-spacing="0.04em" fill="var(--text-secondary)">REP</text>
+        <text x="305" y="96" text-anchor="middle" font-family="var(--font-mono)" font-size="10" letter-spacing="0.04em" fill="var(--text-secondary)">APPROVES</text>
+
+        <rect x="353" y="30" width="100" height="84" rx="4" fill="var(--accent-amber-dim)" stroke="var(--accent-amber-line)"/>
+        <text x="403" y="60" text-anchor="middle" font-family="var(--font-mono)" font-size="15" fill="var(--accent-amber)">P</text>
+        <text x="403" y="82" text-anchor="middle" font-family="var(--font-mono)" font-size="10" letter-spacing="0.04em" fill="var(--text-secondary)">TOOL, AFTER</text>
+        <text x="403" y="96" text-anchor="middle" font-family="var(--font-mono)" font-size="10" letter-spacing="0.04em" fill="var(--text-secondary)">APPROVAL</text>
+
+        <rect x="459" y="30" width="92" height="84" rx="4" fill="var(--navy-panel-2)" stroke="var(--text-secondary)"/>
+        <text x="505" y="60" text-anchor="middle" font-family="var(--font-mono)" font-size="15" fill="var(--text-primary)">Q</text>
+        <text x="505" y="82" text-anchor="middle" font-family="var(--font-mono)" font-size="10" letter-spacing="0.04em" fill="var(--text-secondary)">REP:</text>
+        <text x="505" y="96" text-anchor="middle" font-family="var(--font-mono)" font-size="10" letter-spacing="0.04em" fill="var(--text-secondary)">DATE SENT</text>
+
+        <rect x="557" y="30" width="130" height="84" rx="4" fill="var(--navy-panel-2)" stroke="var(--text-secondary)"/>
+        <text x="622" y="60" text-anchor="middle" font-family="var(--font-mono)" font-size="15" fill="var(--text-primary)">R–U</text>
+        <text x="622" y="82" text-anchor="middle" font-family="var(--font-mono)" font-size="10" letter-spacing="0.04em" fill="var(--text-secondary)">REP: REPLY TYPE,</text>
+        <text x="622" y="96" text-anchor="middle" font-family="var(--font-mono)" font-size="10" letter-spacing="0.04em" fill="var(--text-secondary)">MEETING, WON, LIVE</text>
+
+        <rect x="693" y="30" width="84" height="84" rx="4" fill="var(--accent-amber-dim)" stroke="var(--accent-amber-line)"/>
+        <text x="735" y="60" text-anchor="middle" font-family="var(--font-mono)" font-size="15" fill="var(--accent-amber)">W</text>
+        <text x="735" y="82" text-anchor="middle" font-family="var(--font-mono)" font-size="10" letter-spacing="0.04em" fill="var(--text-secondary)">TOOL:</text>
+        <text x="735" y="96" text-anchor="middle" font-family="var(--font-mono)" font-size="10" letter-spacing="0.04em" fill="var(--text-secondary)">REP NAME</text>
+
+        <rect x="783" y="30" width="150" height="84" rx="4" fill="none" stroke="var(--grid-line-strong)" stroke-dasharray="4,3"/>
+        <text x="858" y="60" text-anchor="middle" font-family="var(--font-mono)" font-size="15" fill="var(--text-muted)">X–Z</text>
+        <text x="858" y="82" text-anchor="middle" font-family="var(--font-mono)" font-size="10" letter-spacing="0.04em" fill="var(--text-secondary)">AUTO: SIGNAL, ANGLE,</text>
+        <text x="858" y="96" text-anchor="middle" font-family="var(--font-mono)" font-size="10" letter-spacing="0.04em" fill="var(--text-secondary)">FRESHNESS CHECK</text>
+
+        <text x="27" y="144" font-family="var(--font-mono)" font-size="10.5" fill="var(--text-muted)">Inside A–N, Days old (H) and Stage (M) calculate themselves.</text>
+
+        <rect x="230" y="182" width="14" height="14" rx="2" fill="var(--accent-amber-dim)" stroke="var(--accent-amber-line)"/>
+        <text x="252" y="193" font-family="var(--font-mono)" font-size="11" fill="var(--text-secondary)">Tool writes</text>
+        <rect x="420" y="182" width="14" height="14" rx="2" fill="var(--navy-panel-2)" stroke="var(--text-secondary)"/>
+        <text x="442" y="193" font-family="var(--font-mono)" font-size="11" fill="var(--text-secondary)">Rep writes</text>
+        <rect x="610" y="182" width="14" height="14" rx="2" fill="none" stroke="var(--grid-line-strong)" stroke-dasharray="3,2"/>
+        <text x="632" y="193" font-family="var(--font-mono)" font-size="11" fill="var(--text-secondary)">Sheet calculates</text>
+      </svg>
+      <div class="diagram-caption">key Log columns, grouped by who writes them — the rep makes every call, the tool does the logging</div>
+    </div>
+  </section>
+
+  <section>
+    <div class="eyebrow">The architecture</div>
+    <div class="panel">
+      <div class="rules">
+        <div class="rule">
+          <div class="rule-num">01</div>
+          <div>
+            <div class="rule-title">Evidence, or it isn't a signal</div>
+            <p>Every hit needs the original source URL and its original publish date, inside that signal's freshness window. No URL or no date means no signal. Sources are public only: the tool never works around a login, paywall or blocked site, and it verifies each company by its domain.</p>
+          </div>
+        </div>
+        <div class="rule">
+          <div class="rule-num">02</div>
+          <div>
+            <div class="rule-title">Route to whoever owns the function the signal is about</div>
+            <p>The first question is who owns the function this signal concerns. If nobody fits, the tool falls back to the department head (the founder or CEO at under about 50 people), but only someone who actually owns that function, and the copy keeps the signal's angle. It also confirms the person still works there.</p>
+          </div>
+        </div>
+        <div class="rule">
+          <div class="rule-num">03</div>
+          <div>
+            <div class="rule-title">Copy may only use what's confirmed</div>
+            <p>An opener can draw on exactly four things: the logged fact, the signal's mapped angle, Claims rows marked Confirmed, and customers marked OK to cite. No invented quotes, numbers or customer names, and every number comes from the Claims tab at run time.</p>
+          </div>
+        </div>
+        <div class="rule">
+          <div class="rule-num">04</div>
+          <div>
+            <div class="rule-title">Timing decides when, never what's said</div>
+            <p>Some signals (funding, price increases, layoffs, departures, lawsuits, regulation, ad spend) are only useful for choosing the moment. They never appear in the message itself.</p>
+          </div>
+        </div>
+        <div class="rule">
+          <div class="rule-num">05</div>
+          <div>
+            <div class="rule-title">Signals shouldn't stack on active outreach</div>
+            <p>A hit is dropped if any rep touched the contact or account in the last 30 days, if the contact has been in five or more sequences, or if the company had distress news in the last 90 days. Accounts also get a 60-day cooldown across all reps, one contact per account per run, and a cap of 10 rows per rep per run. Losing hits to these rules is the point.</p>
+          </div>
+        </div>
+        <div class="rule">
+          <div class="rule-num">06</div>
+          <div>
+            <div class="rule-title">A human approves before anything moves</div>
+            <p>The tool never sends, never enrolls a contact in a sequence, and never edits one. It logs a row and shows the rep a short list. Only after the rep sets column O to Y does it create an Apollo task, and the rep sends from their own inbox. Paid Apollo calls need the rep's confirmation too, with a credit cap per run.</p>
+          </div>
+        </div>
+        <div class="rule">
+          <div class="rule-num">07</div>
+          <div>
+            <div class="rule-title">Facts live in the Sheet; rules live in the spec</div>
+            <p>Claims, customer proof, revenue thresholds and team members change as a company grows, so they sit in single Sheet cells that can be updated in one place. The rules change rarely and only through the Admin, so they sit in one file inside a Claude Project. The signal library has exactly one copy, in the Signals tab.</p>
+          </div>
+        </div>
+        <div class="rule">
+          <div class="rule-num">08</div>
+          <div>
+            <div class="rule-title">Every signal is a hypothesis until the numbers say otherwise</div>
+            <p>A new signal starts as a Hypothesis. It's marked Proven at 5% or more positive replies after 30+ sent (adjustable), and Cut or reworked if there are zero positive after 30. The whole program has a kill rule too: at 60 sent it needs 3+ positive; 1–2 extends the test to 120 (needing 6+); zero means stop and rework. Replies are judged from the actual reply text, since Apollo's replied count includes bounces and auto-replies and open rates are unreliable.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="eyebrow">The ten hard stops</div>
+    <p>Every hit has to pass all ten. Fail one and the row is dropped.</p>
+    <div class="stops">
+      <div class="stop"><div class="stop-code">H1</div><div class="stop-title">Evidence</div><p>Original source URL and publish date, inside the signal's freshness window. No URL or date, no signal.</p></div>
+      <div class="stop"><div class="stop-code">H2</div><div class="stop-title">Exclusions</div><p>Drop current customers, open deals, do-not-contact, closed-won, unsubscribed and bounced. Matches on domain and name aliases, so rebrands and duplicates don't slip through. A current-customer signal becomes an account-management note, never outreach.</p></div>
+      <div class="stop"><div class="stop-code">H3</div><div class="stop-title">Contact history</div><p>Skip if the contact ever said no, any rep touched them in the last 30 days, they've been in 5+ sequences, or the company had distress news in the last 90 days. A "not now" gets scheduled for their date instead.</p></div>
+      <div class="stop"><div class="stop-code">H4</div><div class="stop-title">Volume</div><p>One contact per account per run, a 60-day account cooldown across all reps, and at most 10 rows per rep per run. Paid Apollo calls need the rep's confirmation and a credit cap.</p></div>
+      <div class="stop"><div class="stop-code">H5</div><div class="stop-title">Human approval</div><p>Never send, enroll in a sequence, or edit a sequence. Tasks are created only after the rep marks Y.</p></div>
+      <div class="stop"><div class="stop-code">H6</div><div class="stop-title">Truth</div><p>Copy uses only the logged fact, the signal's mapped angle, Confirmed claims and citable customers. No invented quotes, numbers or names.</p></div>
+      <div class="stop"><div class="stop-code">H7</div><div class="stop-title">Routing</div><p>The contact's persona must be allowed for that signal, and they must still work there. If the seat is open, fall back to the department head who owns the function.</p></div>
+      <div class="stop"><div class="stop-code">H8</div><div class="stop-title">Sources</div><p>Public sources only. Never work around a login, paywall or blocked site. Verify the company by its domain.</p></div>
+      <div class="stop"><div class="stop-code">H9</div><div class="stop-title">Compliance</div><p>EU and UK contacts are flagged for the rep's review before they're logged. No legal commentary in copy.</p></div>
+      <div class="stop"><div class="stop-code">H10</div><div class="stop-title">Measurement</div><p>Judge replies from the reply text. Apollo's replied count includes bounces and auto-replies, and opens are unreliable.</p></div>
+    </div>
+  </section>
+
+  <section>
+    <div class="eyebrow">Running it</div>
+    <p>Setup takes about 30 minutes. After that, a run is two prompts: one to find and log hits, and one, about two weeks after sending, to read the results. Paste the first into a chat inside the Claude Project that holds the rules file, replacing the bracketed parts.</p>
+    <div class="file-viewer">
+      <div class="file-tab">prompts/weekly-run.md</div>
+      <pre class="prompt">Run the signal tool weekly run for [your name]. Follow SPEC.md exactly. Read the Signals, Scoreboard, Claims, Peer Proof and Reps tabs of [your Sheet name or link] first. Log up to 10 verified hits to the Log tab with my name in column W, then show me the short list to approve. Ask before any paid Apollo search.</pre>
+    </div>
+    <p style="margin-top:16px;">After the run, the rep sets <strong style="color:var(--text-primary);">Approved (O)</strong> to Y or N on their rows, tells Claude to create the Apollo tasks for the Y rows, sends, and fills <strong style="color:var(--text-primary);">Date sent (Q)</strong>.</p>
+    <div class="file-viewer">
+      <div class="file-tab">prompts/results-update.md</div>
+      <pre class="prompt">Update the signal Log results for my rows sent 14 or more days ago. Read the actual reply text in my Gmail and fill Reply type (R) and Meeting booked (S). Bounces and auto-replies count as "Bounce or auto-reply", not as replies.</pre>
+    </div>
+    <p style="margin-top:16px;">Once a month the Admin reviews the Scoreboard: signals marked Proven stay Active, signals marked "Cut or rework" get rewritten or switched off, and new learnings go into the rules file. The advice for the first few weeks: run it by hand for 2 to 3 weeks before turning it into a saved skill or a scheduled task, because the first runs always change the rules.</p>
+  </section>
+
+  <section>
+    <div class="eyebrow">What the first dry run taught</div>
+    <div class="panel">
+      <ul class="plain" style="margin-bottom:0;">
+        <li><strong>Job-change data has no date filter.</strong> Scan once per persona keyword instead of scanning every job change.</li>
+        <li><strong>Broad web searches mostly return huge brands.</strong> Searching for "launched an affiliate program" or "announced a partnership" doesn't surface the right accounts; Google Alerts delivered to Gmail work better.</li>
+        <li><strong>"Hiring for" filters over-match.</strong> Apollo's filter also matches partner-sales roles, so every posting gets confirmed on a job board.</li>
+        <li><strong>The 30-day rule removes a lot of hits.</strong> That's the point: signals shouldn't stack on top of active outreach.</li>
+        <li><strong>An open seat doesn't kill the signal.</strong> Route to the department head who owns that function, and keep the signal's angle.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section>
+    <div class="eyebrow">Why this matters</div>
+    <p>Most outbound automation optimizes for volume. This one is built the other way around: it's allowed to drop hits, it can't send on its own, it can only say things that have been confirmed, and it carries its own test for whether it's working. The result is fewer, better-timed touches that a person approved, plus a Scoreboard that can tell you if the whole thing isn't beating plain outreach.</p>
+  </section>
+
+  <section>
+    <div class="eyebrow">Where this stops</div>
+    <p>This is a v1.0 template built from the lessons of one internal dry run, so this page claims no results. The Scoreboard exists to find out whether the system beats your own baseline: your positive replies divided by contacts emailed, over roughly the last 90 days.</p>
+    <p>It also doesn't replace a person. It doesn't send, it doesn't decide whether an account is worth pursuing, and it doesn't give legal advice (EU and UK contacts are flagged for the rep's review rather than judged). It needs Claude with Apollo, Gmail, Google Sheets and Google Drive connected, an Apollo list of qualified accounts, and a company Google account for the Sheet.</p>
+  </section>
+
+  <section>
+    <div class="eyebrow">Use it yourself</div>
+    <ol class="plain">
+      <li><strong>Sheet:</strong> upload <code>template/Signal_Log_Template.xlsx</code> to Google Drive and open it with Google Sheets (File → Save as Google Sheets).</li>
+      <li><strong>Fill the fact tabs:</strong> Claims, Peer Proof and Reps. Delete the example rows.</li>
+      <li><strong>Edit the Signals tab:</strong> set Active = Y for the 3 to 5 signals you'll start with, and rewrite each mapped angle for your product.</li>
+      <li><strong>Set your baseline</strong> on the Scoreboard: your current positive-reply rate per contact emailed.</li>
+      <li><strong>Apollo:</strong> create a contacts list for touched contacts.</li>
+      <li><strong>Rules:</strong> add the rules file to a Claude Project and fill in the bracketed placeholders.</li>
+      <li><strong>Optional:</strong> set up Google Alerts delivered to a Gmail label the tool reads.</li>
+    </ol>
+    <div class="file-viewer">
+      <div class="file-tab">signal-prospecting-tool/</div>
+<pre class="tree">README.md                          overview and setup
+SPEC.md                            the rules Claude follows every run
+CHANGELOG.md                       version history
+LICENSE                            MIT
+prompts/weekly-run.md              paste to run the tool
+prompts/results-update.md          paste to log reply results
+template/Signal_Log_Template.xlsx  the Google Sheet template
+build/build_template.py            regenerates the template</pre>
+    </div>
+    <a class="gh-link" href="https://github.com/wyatt-boelens/signal-prospecting-tool">↗ Get the template on GitHub</a>
+  </section>
+
+  <footer>
+    <span>Wyatt Boelens — GTM Systems / RevOps</span>
+    <span>Public template · MIT licensed</span>
+  </footer>
+
+</div>
+</body>
+</html>
